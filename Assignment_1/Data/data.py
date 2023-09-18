@@ -9,7 +9,6 @@ class Data:
     def __init__(self, data):
         self.data = data
         self.output_dimension = self.data.shape
-        print("in DATA class", self.output_dimension)
 
     def set_data(self, data):
         self.data = data
