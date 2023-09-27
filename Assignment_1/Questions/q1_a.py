@@ -13,8 +13,12 @@ from Data.generator import q1_a
 from Model.evaluate.evaluate import evaluate_model
 
 
-Number_of_iterations = 300 # Experiment to pick your own number of ITERATIONS
-Step_size = 0.000001 # Experiment to pick your own STEP number
+Number_of_iterations = 300 # Experiment to pick your own number of ITERATIONS = batch size
+Step_size = 0.000001 # Experiment to pick your own STEP number = learning rate
+n_epochs = 100
+# batch_num = # int(np.ceil(length_training_images/batch_size))
+# throw away underfull batch, i.e., if you have just 100 data left for the batch
+# throw it away
 
 class Network(BaseNetwork):
     def __init__(self, data_layer):
@@ -48,13 +52,13 @@ class Trainer:
         return network
 
     def net_setup(self, training_data):
-        x, y = training_data
+        x, y = training_data # x is the features, y are the labels for the data
         # TODO: define input data layer
         self.data_layer = Data(x) # x is the input data, y is the output?
         # TODO: construct the network. you don't have to use define_network.
         self.network = self.define_network(data_layer=self.data_layer)
         # TODO: use the appropriate loss function here
-        self.loss_layer = ...
+        self.loss_layer = SquareLoss(self.network.get_output_layer(), labels=y)
         # TODO: construct the optimizer class here. You can retrieve all modules with parameters (thus need to be optimized be the optimizer) by "network.get_modules_with_parameters()"
         self.optimizer = ...
         return self.data_layer, self.network, self.loss_layer, self.optim
@@ -63,8 +67,12 @@ class Trainer:
         # TODO: train the network for a single iteration
         # you have to return loss for the function
         # I use a regression loss for training
+        # loss layer = updating gradients
+        # optimizer = updating weights and biases
 
-        loss = ...
+        loss = self.loss_layer.forward()
+        self.loss_layer.backward()
+        self.optimizer.step()
         return loss
 
     def get_num_iters_on_public_test(self):
@@ -74,8 +82,10 @@ class Trainer:
     def train(self, num_iter):
         train_losses = []
         # TODO: train the network for num_iter iterations. You should append the loss of each iteration to train_losses.
-        # So, I call train step to do the step of training, 
+        # So, I call train step to do the step of training,
+        # num_iter is size of batch.
 
+        self.train_step()
 
         # you have to return train_losses for the function
         return train_losses
@@ -89,7 +99,7 @@ def main(test=False):
     # DO NOT REMOVE THESE IF/ELSE
     if not test:
         # Your code goes here.
-
+        # epoch and batch numbers go here.
         pass
     else:
         # DO NOT CHANGE THIS BRANCH!
