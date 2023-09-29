@@ -44,8 +44,8 @@ class AdamSolver:
 
             # TODO: Compute bias-corrected first moment (m_hat) and second moment (v_hat)
             # 't' is the timestep which is incremented each time this method is called.
-            m_m_hat = ...
-            m_v_hat = ...
+            m_m_hat = module.m / (1 - np.power(self.beta1, self.t))
+            m_v_hat = module.v / (1 - np.power(self.beta2, self.t))
 
             # DONE: Update the weights (W) using the bias-corrected moments.
             # The update rule for Adam divides the learning rate-scaled m_hat by the square root of v_hat.

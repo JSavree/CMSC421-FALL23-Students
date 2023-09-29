@@ -28,7 +28,7 @@ class LinearLayer:
         self.output_dimension = np.array([num_data, number_out_features])
         # Declare the weight matrix and initialize it
         self.W = np.random.randn(num_in_features, number_out_features) / np.sqrt(num_in_features)
-        print(self.W)
+        #print(self.W)
 
 
     def forward(self):
@@ -36,6 +36,7 @@ class LinearLayer:
         Compute the forward pass for the layer, i.e., compute XW.
         """
         self.input_array = self.input_layer.forward()
+        #print(self.input_array.shape)
         print("Linear Forward", self.input_array)
         self.output_array = self.input_array @ self.W
         return self.output_array
@@ -48,8 +49,9 @@ class LinearLayer:
         self.G = self.input_array[:, :, np.newaxis] * downstream[:, np.newaxis]
         # Compute gradient with respect to inputs
         print("Shape of G:", self.G.shape)
-        print("G:", self.G)
-        print("W:", self.W)
+        #print("G:", self.G)
+        #print("W:", self.W)
+
         # print("Shape of downstream:", downstream.shape)
         # print("Values of downstream:", downstream)
         print("Shape of downstream in LinearLayer:", downstream.shape)

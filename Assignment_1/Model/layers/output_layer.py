@@ -26,14 +26,13 @@ class OutputLayer(LinearLayer):
             self.activation = Sigmoid(self)
         elif activation == 'Tanh':
             self.activation = Tanh(self)
-        # elif activation == 'Linear':
-        #     self.activation = 
+
 
     def forward(self):
         _out = super().forward()
-        # self.activated_output = self.activation.forward()
+
         return _out
 
     def backward(self, downstream):
-        # activation_grad = self.activation.backward(downstream)
+
         super().backward(downstream)

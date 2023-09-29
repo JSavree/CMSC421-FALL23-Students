@@ -62,7 +62,7 @@ class Trainer:
         self.loss_layer = ...
         #TODO: construct the optimizer class here. You can retrieve all modules with parameters (thus need to be optimized be the optimizer) by "network.get_modules_with_parameters()"
         self.optimizer = ...
-        return self.data_layer, self.network, self.loss_layer, self.optim
+        return self.data_layer, self.network, self.loss_layer, self.optimizer
     
     def train_step(self):
         # TODO: train the network for a single iteration

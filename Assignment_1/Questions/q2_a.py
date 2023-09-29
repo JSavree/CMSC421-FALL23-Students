@@ -9,40 +9,35 @@ from Model.layers.output_layer import OutputLayer
 from Model.optimizers.sgd import SGDSolver
 from Model.optimizers.adam import AdamSolver
 from Data.data import Data
-from Data.generator import q1_a
+from Data.generator import q2_a
 from Model.evaluate.evaluate import evaluate_model
 
-# xtrain, ytrain = q1_a()["train"] # get my training and testing data sets
-# xtest, ytest = q1_a()["test"]
-
-# Testing out the hyper parameters wasn't that difficult, for me at least, mainly because
-# I already had a good idea for what kind of learning rate I should try and set things to
-# for simple linear regression
-# The number of iterations was more complicated. I first overshot what I thought would be a good
-# number of iterations, i.e., I set it to 10000. Then I looked at the loss graph
-# to see when the loss hit close to 0, i.e., at what iteration did it reach close to 0 (and plateau),
-# then I just decreased the number of iterations to a good amount.
-Number_of_iterations = 3000 # Experiment to pick your own number of ITERATIONS = batch size
-Step_size = 0.05 # Experiment to pick your own STEP number = learning rate
+# First tested with 3000 iterations, saw from the loss graph it hit near 0 loss much sooner,
+# so I decreased the number of iterations to 100. Saw I didn't need 100 iterations either,
+# decreased iterations some more. But the predicated values still looked bad, so I then changed
+# my learning rate (decreased it). The line started looking better, but now I needed to increase
+# my number of iterations.
+# I started with a default value of hidden units equal to 128
+Number_of_iterations = 600 # Experiment to pick your own number of ITERATIONS = batch size
+Step_size = 1e-6 # Experiment to pick your own STEP number = learning rate
 n_epochs = 100
-# length_training_data = len(xtrain)
-# batch_num = # int(np.ceil(length_training_images/batch_size))
-# throw away underfull batch, i.e., if you have just 100 data left for the batch
-# throw it away
 
 class Network(BaseNetwork):
-    def __init__(self, data_layer):
+    # TODO: you might need to pass additional arguments to init for prob 2, 3, 4 and mnist
+    def __init__(self, data_layer, hidden_units):
+        # you should always call __init__ first
         super().__init__()
+        # TODO: define your network architecture here
         data = data_layer.forward()
         self.input_layer = InputLayer(data_layer)
         print("data shape in network", data.shape)
-        self.hidden_layer1 = HiddenLayer(self.input_layer, 1)
-        self.bias_layer1 = BiasLayer(self.hidden_layer1)
-        self.output_layer1 = OutputLayer(self.bias_layer1, 1) # Activation funciton is linear by default
+        self.hidden_layer1 = HiddenLayer(self.input_layer, hidden_units)
+        self.bias_layer1 = BiasLayer(self.hidden_layer1, activation="ReLU")
+        self.output_layer1 = OutputLayer(self.bias_layer1, 1)
+        # TODO: always call self.set_output_layer with the output layer of this network (usually the last layer)
         self.set_output_layer(self.output_layer1)
 
 
-# To get you started we built the network for you!! Please use the template file to finish answering the question
 class Trainer:
     def __init__(self):
         pass
@@ -55,18 +50,19 @@ class Trainer:
         Note: we might be testing if your network code is generic enough through define_network. Your network code can be even more general, but this is the bare minimum you need to support.
         Note: You are not required to use define_network in setup function below, although you are welcome to.
         '''
-        #hidden_units = parameters["hidden_units"]  # needed for prob 2, 3, 4
+        hidden_units = parameters["hidden_units"]  # needed for prob 2, 3, 4
         #hidden_layers = parameters["hidden_layers"]  # needed for prob 3, 4,
         # TODO: construct your network here
-        network = Network(data_layer)
+        network = Network(data_layer, hidden_units)
         return network
 
-    def net_setup(self, training_data):
-        x, y = training_data # x is the features, y are the labels for the data
+    def net_setup(self, training_data, hidden_units):
+        x, y = training_data
         # TODO: define input data layer
-        self.data_layer = Data(x) # x is the input data, y is the output?
+        self.data_layer = Data(x)
         # TODO: construct the network. you don't have to use define_network.
-        self.network = self.define_network(data_layer=self.data_layer)
+        params = {"hidden_units" : hidden_units}
+        self.network = self.define_network(self.data_layer, params)
         # TODO: use the appropriate loss function here
         self.loss_layer = SquareLoss(self.network.get_output_layer(), labels=y)
         # TODO: construct the optimizer class here. You can retrieve all modules with parameters (thus need to be optimized be the optimizer) by "network.get_modules_with_parameters()"
@@ -76,10 +72,6 @@ class Trainer:
     def train_step(self):
         # TODO: train the network for a single iteration
         # you have to return loss for the function
-        # I use a regression loss for training
-        # loss layer = updating gradients
-        # optimizer = updating weights and biases
-
         loss = self.loss_layer.forward()
 
         self.loss_layer.backward()
@@ -88,7 +80,6 @@ class Trainer:
 
         return loss
 
-    # just ignore this
     def get_num_iters_on_public_test(self):
         # TODO: adjust this number to how much iterations you want to train on the public test dataset for this problem.
         return 30000
@@ -96,15 +87,12 @@ class Trainer:
     def train(self, num_iter):
         train_losses = []
         # TODO: train the network for num_iter iterations. You should append the loss of each iteration to train_losses.
-        # So, I call train step to do the step of training,
-        # num_iter is size of batch.
         for iter in range(num_iter):
             train_loss = self.train_step()
             train_losses.append(train_loss)
 
         # you have to return train_losses for the function
         return train_losses
-
 
 def plot_graph(dataset, pred_line=None, losses=None):
     plots = 2 if losses != None else 1
@@ -159,11 +147,12 @@ def plot_pred_line(X, y, y_pred, losses=None):
     return
 
 # DO NOT CHANGE THE NAME OF THIS FUNCTION
+# DO NOT CHANGE THE NAME OF THIS FUNCTION
 def main(test=False):
     # setup the trainer
     trainer = Trainer()
 
-    data = q1_a()
+    data = q2_a()
 
     # DO NOT REMOVE THESE IF/ELSE
     if not test:
@@ -171,7 +160,7 @@ def main(test=False):
         # epoch and batch numbers go here.
 
         # setup network
-        data_layer, network, loss_layer, optimizer = trainer.net_setup(training_data=data['train'])
+        data_layer, network, loss_layer, optimizer = trainer.net_setup(training_data=data['train'], hidden_units=64)
         losses = trainer.train(Number_of_iterations)
 
         plt.plot(losses)
@@ -188,10 +177,10 @@ def main(test=False):
         metrics = evaluate_model(ytest, y_preds)
         print(metrics)
 
-        start = 0
-        end = 10
-        step_sizes = (end - start) / len(ytest)
-        x_values = np.arange(start, end, step_sizes)
+        # start = 0
+        # end = 10
+        # step_sizes = (end - start) / len(ytest)
+        # x_values = np.arange(start, end, step_sizes)
 
         plot_pred_line(xtest, ytest, y_preds, losses)
 

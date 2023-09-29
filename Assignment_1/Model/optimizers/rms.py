@@ -34,11 +34,11 @@ class RMSPropSolver:
         for module in self.modules:
             # TODO: Update the moving average of the squared gradient (G_squared_moving_avg) for each parameter.
             # The formula uses 'beta' for the decay rate and takes into account the square of the mean gradient for the current batch.
-            module.G_squared_moving_avg = ...
+            module.G_squared_moving_avg = self.beta * module.G_squared_moving_avg + (1 - self.beta) * np.mean(np.square(module.G))
             # TODO: Update the weights (W) using the RMSProp update rule.
             # The update divides the learning rate-scaled mean gradient by the square root of the moving average of the squared gradient.
             # We add 'epsilon' to the denominator to avoid division by zero.
-            module.W = ...
+            module.W = module.W - self.learning_rate * np.mean(module.G) / np.sqrt(module.G_squared_moving_avg + self.epsilon)
             pass
         pass
     pass

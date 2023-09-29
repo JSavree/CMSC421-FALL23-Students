@@ -9,13 +9,15 @@ class BiasLayer:
     Each feature dimension of the input gets a bias term.
     """
 
-    def __init__(self, input_layer, activation='ReLU') -> None:
+    def __init__(self, input_layer, activation=None) -> None:
         self.input_layer = input_layer
-        num_data, num_input_features = input_layer.output_dimension
+        num_data, num_input_features = input_layer.input_layer.output_dimension
+        print("number of input features", num_input_features)
         self.output_dimension = input_layer.output_dimension
         # Declare the weight matrix
         # TODO: Declare the weight matrix (bias term) for the layer. Replace `None` with appropriate code.
-        self.W = None 
+        self.W = np.random.randn(num_input_features, 1) / np.sqrt(num_input_features)
+        print("shape of W", self.W.shape)
 
         if activation == 'Sigmoid':
             self.activation = Sigmoid()
@@ -23,8 +25,11 @@ class BiasLayer:
         elif activation == 'Tahn':
             self.activation = Tanh()
 
-        else:
+        elif activation == 'ReLU':
             self.activation = ReLU()
+
+        else:
+            self.activation = None
     
     def forward(self):
         # self.input_array = self.input_layer.forward()
@@ -38,14 +43,18 @@ class BiasLayer:
         The output array after adding the bias terms.
         """
         # TODO: Get the output from the input layer and store it in `self.input_array`. Replace `None` with appropriate code.
-        self.input_array = None 
-        
+        self.input_array = self.input_layer.forward()
+
         # TODO: Perform the actual forward computation and store the result in `self.output_array`. Replace `None` with appropriate code.
-        self.output_array = None 
+        self.output_array = self.input_array + self.W
         
         # TODO: Activate the computed output_array by passing it to the forward function of the activation function.
-        self.activated_output = ...
-        return self.activated_output
+        if self.activation != None:
+            self.activated_output = self.activation.forward(self.output_array)
+            return self.activated_output
+
+        else:
+            return self.output_array
 
 
     def backward(self, downstream):
@@ -55,11 +64,14 @@ class BiasLayer:
         Parameters:
         - downstream: The gradient of the loss function with respect to the output of this layer.
         """
-        # TODO: Compute the gradient of the output with respect to the bias term `self.W` and store it in `self.G`. Replace `None` with appropriate code.
-        self.G = None
+
+        self.G = downstream
         
-        activation_grad = self.activation.backward(downstream, self.activated_output)
-        
-        # TODO: Compute the gradient of the output with respect to the inputs and pass this backward to the layer behind. Replace `None` with appropriate code.
-        self.input_layer.backward(None)
+        if self.activation != None:
+            activation_grad = self.activation.backward(downstream, self.activated_output)
+
+            # TODO: Compute the gradient of the output with respect to the inputs and pass this backward to the layer behind. Replace `None` with appropriate code.
+            self.input_layer.backward(activation_grad)
+        else:
+            self.input_layer.backward(downstream)
     

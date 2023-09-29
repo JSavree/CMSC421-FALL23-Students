@@ -22,11 +22,12 @@ class ReLU:
     @staticmethod
     def forward(input_array):
         #TODO: Apply the ReLU activation function to the output of the input layer
-        output_array = ...
+        output_array = np.maximum(0, input_array)
         return output_array
     
     @staticmethod
     def backward(downstream, input_array=None):
         #TODO: Compute the gradient of the loss with respect to the input
-        input_grad = ...
+        k = 1.2
+        input_grad = 1.0 / (2 * k) * np.log(1 + np.exp(2*k*downstream))
         return input_grad

@@ -40,7 +40,7 @@ class SGDSolver:
 
         for module in self.modules:
             # TODO: Loop through each module in self.modules and update its weight `W` using its gradient `G`.
-            module.W = ...
+            module.W = module.W - (self.learning_rate * np.mean(module.G))
 
             pass
 
