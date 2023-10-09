@@ -11,13 +11,13 @@ class BiasLayer:
 
     def __init__(self, input_layer, activation=None) -> None:
         self.input_layer = input_layer
-        num_data, num_input_features = input_layer.input_layer.output_dimension
-        print("number of input features", num_input_features)
+        num_data, num_input_features = input_layer.output_dimension
+        #print("number of input features", num_input_features)
         self.output_dimension = input_layer.output_dimension
         # Declare the weight matrix
         # TODO: Declare the weight matrix (bias term) for the layer. Replace `None` with appropriate code.
-        self.W = np.random.randn(num_input_features, 1) / np.sqrt(num_input_features)
-        print("shape of W", self.W.shape)
+        self.W = np.random.randn(1, num_input_features) / np.sqrt(num_input_features)
+        #print("shape of W", self.W.shape)
 
         if activation == 'Sigmoid':
             self.activation = Sigmoid()

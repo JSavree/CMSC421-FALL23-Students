@@ -33,14 +33,14 @@ class CrossEntropySoftMaxLoss:
         self.in_array = self.input_layer.forward()
         self.num_data = self.in_array.shape[1]
         # TODO: Compute the result of mean squared error, and store it as self.out_array
-        self.out_array = ...
+        self.out_array = -np.dot(self.ones_hot,np.log(self.in_array))
         return self.out_array
 
     def backward(self):
         """
         """
         # TODO: Compute grad of loss with respect to inputs, and hand this gradient backward to the layer behind. Be careful! Don't exponentiate an arbitrary positive number as it may overflow. 
-        input_grad = ...
+        input_grad = self.in_array - self.ones_hot
         self.in_layer.backward(input_grad)
 
 

@@ -18,7 +18,11 @@ from sklearn.metrics import confusion_matrix, precision_recall_fscore_support
 from torchsummary import summary
 from cnn import CNNModel  # Assuming you have a CNNModel class in a 'model' module
 # from utils import str2bool  # Utility function for argument parsing
-
+# Number of input and output channels for both convolutional and linear layers are
+# hyperparameters. I need to manually determine feature map size
+# I need to calculate the the feature map size for every layer (convolutional layer)
+# size of input images for my dataset is:
+# input image size affects feature map size.
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Neural Networks")
     parser.add_argument("-mode", dest="mode", type=str, default='train', help="train or test")
@@ -138,6 +142,7 @@ def train_one_epoch(model, optimizer, train_loader, device):
         accy = compute_accuracy(y_pred, y_labels)
 
         # Here, you can add code to log or print the loss and accuracy if you want
+        print(accy)
 
 
 def test_model(model, test_loader, device):

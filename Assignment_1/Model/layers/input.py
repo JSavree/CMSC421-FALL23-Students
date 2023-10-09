@@ -45,7 +45,7 @@ class InputLayer:
         # DO NOT MODIFY THIS FILE!!!!!  |
         # -------------------------------
         self.input_array = self.data_layer.forward()
-        print(self.output_dimension)
+        #print(self.output_dimension)
         return self.input_array
 
     def backward(self, downstream):

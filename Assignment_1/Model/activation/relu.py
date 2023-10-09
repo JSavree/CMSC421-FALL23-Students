@@ -28,6 +28,10 @@ class ReLU:
     @staticmethod
     def backward(downstream, input_array=None):
         #TODO: Compute the gradient of the loss with respect to the input
-        k = 1.2
-        input_grad = 1.0 / (2 * k) * np.log(1 + np.exp(2*k*downstream))
+
+        #print("downstream shape", downstream.shape)
+        #print("input array", input_array.shape)
+        mask = input_array > 0
+        input_grad = downstream * mask
+        #print("input grad shape", input_grad.shape)
         return input_grad

@@ -12,9 +12,6 @@ from Data.data import Data
 from Data.generator import q1_a
 from Model.evaluate.evaluate import evaluate_model
 
-# xtrain, ytrain = q1_a()["train"] # get my training and testing data sets
-# xtest, ytest = q1_a()["test"]
-
 # Testing out the hyper parameters wasn't that difficult, for me at least, mainly because
 # I already had a good idea for what kind of learning rate I should try and set things to
 # for simple linear regression
@@ -24,11 +21,7 @@ from Model.evaluate.evaluate import evaluate_model
 # then I just decreased the number of iterations to a good amount.
 Number_of_iterations = 3000 # Experiment to pick your own number of ITERATIONS = batch size
 Step_size = 0.05 # Experiment to pick your own STEP number = learning rate
-n_epochs = 100
-# length_training_data = len(xtrain)
-# batch_num = # int(np.ceil(length_training_images/batch_size))
-# throw away underfull batch, i.e., if you have just 100 data left for the batch
-# throw it away
+
 
 class Network(BaseNetwork):
     def __init__(self, data_layer):
@@ -115,15 +108,12 @@ def plot_graph(dataset, pred_line=None, losses=None):
 
     ax1 = fig.add_subplot(1, plots, 1)
 
-    # y_sort = np.sort(y, axis=0)
-
     scatter1 = ax1.scatter(X, y, alpha=0.8)  # Plot the original set of datapoints
 
     if (pred_line != None):
 
         x_line, y_line = pred_line['x_line'], pred_line['y_line']
 
-        # ax1.plot(x_line, y_line, linewidth=2, markersize=12, color='red', alpha=0.8)  # Plot the randomly generated line
         scatter2 = ax1.scatter(x_line, y_line, color='red', alpha=0.8)
         ax1.legend([scatter1, scatter2], ['Actual', 'Predicted'])
         ax1.set_title('Predicted Line on set of Datapoints')
@@ -146,13 +136,9 @@ def plot_graph(dataset, pred_line=None, losses=None):
 
 
 # Function to plot predicted line
-
 def plot_pred_line(X, y, y_pred, losses=None):
-    # Generate a set of datapoints on x for creating a line.
-    # We shall consider the range of X_train for generating the line so that the line superposes the datapoints.
     x_line = X
-    # Calculate the corresponding y with the parameter values of m & b
-    y_line = y_pred # np.sort(y_pred, axis=0)
+    y_line = y_pred
 
     plot_graph(dataset={'X': X, 'y': y}, pred_line={'x_line': x_line, 'y_line': y_line})
 
@@ -168,12 +154,12 @@ def main(test=False):
     # DO NOT REMOVE THESE IF/ELSE
     if not test:
         # Your code goes here.
-        # epoch and batch numbers go here.
 
         # setup network
         data_layer, network, loss_layer, optimizer = trainer.net_setup(training_data=data['train'])
         losses = trainer.train(Number_of_iterations)
 
+        # Loss plot
         plt.plot(losses)
         plt.ylabel("Loss of Neural Network")
         plt.xlabel("Number of Iterations (Epochs)")
@@ -188,13 +174,7 @@ def main(test=False):
         metrics = evaluate_model(ytest, y_preds)
         print(metrics)
 
-        start = 0
-        end = 10
-        step_sizes = (end - start) / len(ytest)
-        x_values = np.arange(start, end, step_sizes)
-
         plot_pred_line(xtest, ytest, y_preds, losses)
-
 
         pass
     else:

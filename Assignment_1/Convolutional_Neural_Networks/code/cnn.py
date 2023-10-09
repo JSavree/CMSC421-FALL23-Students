@@ -49,7 +49,7 @@ class CNNModel(nn.Module):
             result: Output tensor of shape (batch_size, num_classes)
         """
         # TODO Feed input features to the CNN models defined above
-        x_out = ...
+        x_out = F.relu()
         
         # TODO Flatten tensor code
         x = ...

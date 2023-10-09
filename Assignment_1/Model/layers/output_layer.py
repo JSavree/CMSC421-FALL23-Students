@@ -23,7 +23,7 @@ class OutputLayer(LinearLayer):
     def __init__(self, input_layer, num_out_features, activation='Linear'):
         super().__init__(input_layer, num_out_features)
         if activation == 'Sigmoid':
-            self.activation = Sigmoid(self)
+            self.activation = Sigmoid()
         elif activation == 'Tanh':
             self.activation = Tanh(self)
 

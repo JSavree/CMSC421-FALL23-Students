@@ -20,7 +20,7 @@ class LinearLayer:
         Raises:
             AssertionError: If input layer dimensions are not a list of 1D linear feature data.
         """
-        print("Dim in linear layer", input_layer.output_dimension)
+        #print("Dim in linear layer", input_layer.output_dimension)
         # print(input_layer.output_dimension)
         assert len(input_layer.output_dimension) == 2, "Input layer must contain a list of 1D linear feature data."
         self.input_layer = input_layer
@@ -37,7 +37,7 @@ class LinearLayer:
         """
         self.input_array = self.input_layer.forward()
         #print(self.input_array.shape)
-        print("Linear Forward", self.input_array)
+        #print("Linear Forward", self.input_array)
         self.output_array = self.input_array @ self.W
         return self.output_array
 
@@ -48,14 +48,14 @@ class LinearLayer:
         # Compute gradient with respect to weights
         self.G = self.input_array[:, :, np.newaxis] * downstream[:, np.newaxis]
         # Compute gradient with respect to inputs
-        print("Shape of G:", self.G.shape)
+        #print("Shape of G:", self.G.shape)
         #print("G:", self.G)
         #print("W:", self.W)
 
         # print("Shape of downstream:", downstream.shape)
         # print("Values of downstream:", downstream)
-        print("Shape of downstream in LinearLayer:", downstream.shape)
+        #print("Shape of downstream in LinearLayer:", downstream.shape)
         input_grad = (self.W @ downstream[:, :, np.newaxis]).squeeze(axis=-1)
-        print('Shape of input_grad in LinearLayer: ', input_grad.shape)
-        print('Shape of self.input_array in LinearLayer:', self.input_array.shape)
+        #print('Shape of input_grad in LinearLayer: ', input_grad.shape)
+        #print('Shape of self.input_array in LinearLayer:', self.input_array.shape)
         self.input_layer.backward(input_grad)

@@ -120,7 +120,7 @@ def q2_a():
 
 
 def q2_b():
-    xtrain, xtest, ytrain, ytest = generate_sine_data(num_samples=100000, dimension=5, test_size=0.2, low=0, high=10)
+    xtrain, xtest, ytrain, ytest = generate_sine_data(num_samples=10000, dimension=5, test_size=0.2, low=0, high=10)
     xtrain, xtest, ytrain, ytest = np.array(xtrain, dtype=np.float32), np.array(xtest, dtype=np.float32), np.array(
         ytrain, dtype=np.float32), np.array(ytest, dtype=np.float32)
     print(xtrain.shape, xtest.shape, ytrain.shape, ytest.shape)
@@ -173,7 +173,7 @@ def q3_b_l():
 
 
 def q3_b_nl():
-    xtrain, xtest, ytrain, ytest = generate_sine_data(num_samples=100000, dimension=5, test_size=0.2, low=0, high=10,
+    xtrain, xtest, ytrain, ytest = generate_sine_data(num_samples=10000, dimension=5, test_size=0.2, low=0, high=10,
                                                       categorical=True)
     xtrain, xtest, ytrain, ytest = np.array(xtrain, dtype=np.float32), np.array(xtest, dtype=np.float32), np.array(
         ytrain, dtype=np.float32), np.array(ytest, dtype=np.float32)

@@ -29,7 +29,13 @@ class CrossEntropyLoss:
         self.in_array = self.input_layer.forward()
         self.num_data = self.in_array.shape[1]
         # TODO: Compute the result of mean squared error, and store it as self.out_array
-        self.out_array = ...
+        # # not mean squared error, it should be cross entropy loss, right?
+        # print(self.num_data)
+        # print(self.in_array)
+        term_0 = (1 - self.labels) * np.log(1 - self.in_array + 1e-7)
+        term_1 = self.labels * np.log(np.abs(self.in_array) + 1e-7) # does log slow things down?
+        # self.out_array = (-1 / self.num_data) * (np.dot(self.labels, np.log(self.in_array).T) + np.dot(1 - self.labels, np.log(1 - self.in_array).T))
+        self.out_array = -np.mean(term_1 + term_0, axis=0)
         return self.out_array
 
 
@@ -37,7 +43,7 @@ class CrossEntropyLoss:
         """
         """
         # TODO: Compute grad of loss with respect to inputs, and hand this gradient backward to the layer behind
-        input_grad = ... 
+        input_grad = (self.in_array - self.labels) / (self.in_array * (1 - self.in_array))
         self.input_layer.backward(input_grad)
         pass
 

@@ -4,39 +4,58 @@ import matplotlib.pyplot as plt
 from Model.layers.input import InputLayer
 from Model.layers.hidden import HiddenLayer
 from Model.loss.square_loss import SquareLoss
+from Model.loss.cross_entropy_loss import CrossEntropyLoss
 from Model.layers.bias import BiasLayer
 from Model.layers.output_layer import OutputLayer
+from Model.layers.network import ModuleList
+import Model.layers as layers
 from Model.optimizers.sgd import SGDSolver
 from Model.optimizers.adam import AdamSolver
 from Data.data import Data
-from Data.generator import q2_b
+from Data.generator import q2_a
 from Model.evaluate.evaluate import evaluate_model
 
 # When he says logistic activation function, he means sigmoid
 
-# First tested with 3000 iterations, saw from the loss graph it hit near 0 loss much sooner,
-# so I decreased the number of iterations to 100. Saw I didn't need 100 iterations either,
-# decreased iterations some more. But the predicated values still looked bad, so I then changed
-# my learning rate (decreased it). The line started looking better, but now I needed to increase
-# my number of iterations.
-# I started with a default value of hidden units equal to 128
-# This was much more difficult to do, thoguh after I saw that my line was
-# overfitting, I decreased the step_size.
-Number_of_iterations = 15000 # Experiment to pick your own number of ITERATIONS = batch size
-Step_size = 0.01 # Experiment to pick your own STEP number = learning rate
+
+# I started with a default value of hidden units equal to 128, and halved the number of
+# hidden units for each layer.
+# I also reduced my number of iterations to half of what I did for q2_a, since
+# I expected more layers (3 layers used in this case)to take a lower number of iterations
+# to reach a good result.
+# When using 5 layers, I halved the number of iterations once again (but still keeping
+# the same learning rate), and still got a good result from the network. So, it seems
+# like increasing the number of layers allows me to decrease the number of iterations by
+# a lot, making training much faster.
+Number_of_iterations_3layers = 5000 # Experiment to pick your own number of ITERATIONS = batch size
+Number_of_iterations_5layers = 2000
+# The number of iterations were reduced by a half (from 10000 to 5000), though the
+# learning rate was adjusted to 0.005.
+Step_size = 0.005 # Experiment to pick your own STEP number = learning rate
 
 class Network(BaseNetwork):
     # TODO: you might need to pass additional arguments to init for prob 2, 3, 4 and mnist
-    def __init__(self, data_layer, hidden_units):
+    def __init__(self, data_layer, hidden_units, hidden_layers):
         # you should always call __init__ first
         super().__init__()
         # TODO: define your network architecture here
         data = data_layer.forward()
         self.input_layer = InputLayer(data_layer)
         print("data shape in network", data.shape)
-        self.hidden_layer1 = HiddenLayer(self.input_layer, hidden_units)
-        self.bias_layer1 = BiasLayer(self.hidden_layer1, activation="ReLU")
-        self.output_layer1 = OutputLayer(self.bias_layer1, 1)
+        self.hidden_layer1 = HiddenLayer(self.input_layer, hidden_units[0])
+        # For prob 3 and 4:
+        # layers.ModuleList can be used to add arbitrary number of layers to the network
+        # e.g.:
+        # self.MY_MODULE_LIST = layers.ModuleList()
+        # for i in range(N):
+        #     self.MY_MODULE_LIST.append(layers.Linear(...))
+        self.MY_MODULE_LIST = ModuleList()
+        self.MY_MODULE_LIST.append(BiasLayer(self.hidden_layer1, activation="ReLU"))
+        for i in range(hidden_layers-1):
+            self.MY_MODULE_LIST.append(HiddenLayer(self.MY_MODULE_LIST[-1], hidden_units[i+1]))
+            self.MY_MODULE_LIST.append(BiasLayer(self.MY_MODULE_LIST[-1], activation="ReLU"))
+
+        self.output_layer1 = OutputLayer(self.MY_MODULE_LIST[-1], 1)
         # TODO: always call self.set_output_layer with the output layer of this network (usually the last layer)
         self.set_output_layer(self.output_layer1)
 
@@ -54,16 +73,17 @@ class Trainer:
         Note: You are not required to use define_network in setup function below, although you are welcome to.
         '''
         hidden_units = parameters["hidden_units"]  # needed for prob 2, 3, 4
+        hidden_layers = parameters["hidden_layers"]  # needed for prob 3, 4,
         # TODO: construct your network here
-        network = Network(data_layer, hidden_units)
+        network = Network(data_layer, hidden_units, hidden_layers)
         return network
 
-    def net_setup(self, training_data, hidden_units):
+    def net_setup(self, training_data, hidden_units, hidden_layers):
         x, y = training_data
         # TODO: define input data layer
         self.data_layer = Data(x)
         # TODO: construct the network. you don't have to use define_network.
-        params = {"hidden_units" : hidden_units}
+        params = {"hidden_units" : hidden_units, "hidden_layers" : hidden_layers}
         self.network = self.define_network(self.data_layer, params)
         # TODO: use the appropriate loss function here
         self.loss_layer = SquareLoss(self.network.get_output_layer(), labels=y)
@@ -94,8 +114,7 @@ class Trainer:
         # you have to return train_losses for the function
         return train_losses
 
-
-def plot_graph(dataset, pred_line=None, plot_title_num=1, losses=None):
+def plot_graph(dataset, pred_line=None, losses=None):
     plots = 2 if losses != None else 1
 
     fig = plt.figure(figsize=(8 * plots, 6))
@@ -112,7 +131,7 @@ def plot_graph(dataset, pred_line=None, plot_title_num=1, losses=None):
 
         scatter2 = ax1.scatter(x_line, y_line, color='red', alpha=0.8)
         ax1.legend([scatter1, scatter2], ['Actual', 'Predicted'])
-        ax1.set_title('Predicted Line on set of Datapoints plot {}'.format(plot_title_num))
+        ax1.set_title('Predicted Line on set of Datapoints Plot')
 
     else:
         ax1.set_title('Plot of Datapoints generated')
@@ -132,11 +151,12 @@ def plot_graph(dataset, pred_line=None, plot_title_num=1, losses=None):
 
 
 # Function to plot predicted line
-def plot_pred_line(X, y, y_pred, plot_title_num, losses=None):
+
+def plot_pred_line(X, y, y_pred, losses=None):
     x_line = X
     y_line = y_pred
 
-    plot_graph(dataset={'X': X, 'y': y}, pred_line={'x_line': x_line, 'y_line': y_line}, plot_title_num=plot_title_num)
+    plot_graph(dataset={'X': X, 'y': y}, pred_line={'x_line': x_line, 'y_line': y_line})
 
     return
 
@@ -145,15 +165,31 @@ def main(test=False):
     # setup the trainer
     trainer = Trainer()
 
-    data = q2_b()
+    data = q2_a()
+
+    # 3 or 5
+    is_3_hidden_layers = False;
 
     # DO NOT REMOVE THESE IF/ELSE
     if not test:
         # Your code goes here.
 
         # setup network
-        data_layer, network, loss_layer, optimizer = trainer.net_setup(training_data=data['train'], hidden_units=256)
-        losses = trainer.train(Number_of_iterations)
+        # testing with 3 hidden layers:
+        if is_3_hidden_layers:
+            hidden_units = [128, 64, 32]
+            hidden_layers = 3
+        else:
+            # testing with 5 hidden layers
+            hidden_units = [128, 64, 32, 16, 8]
+            hidden_layers = 5
+
+        data_layer, network, loss_layer, optimizer = trainer.net_setup(training_data=data['train'], hidden_units=hidden_units, hidden_layers=hidden_layers)
+
+        if is_3_hidden_layers:
+            losses = trainer.train(Number_of_iterations_3layers)
+        else:
+            losses = trainer.train(Number_of_iterations_5layers)
 
         # Loss plot
         plt.plot(losses)
@@ -170,11 +206,9 @@ def main(test=False):
         metrics = evaluate_model(ytest, y_preds)
         print(metrics)
 
-        plot_pred_line(xtest[:, [0]], ytest, y_preds, 1)
-        plot_pred_line(xtest[:, [1]], ytest, y_preds, 2)
-        plot_pred_line(xtest[:, [2]], ytest, y_preds, 3)
-        plot_pred_line(xtest[:, [3]], ytest, y_preds, 4)
-        plot_pred_line(xtest[:, [4]], ytest, y_preds, 5)
+        plot_pred_line(xtest, ytest, y_preds, losses)
+
+
 
         pass
     else:
