@@ -1,6 +1,11 @@
 from Model.layers.network import BaseNetwork
 import numpy as np
+from typing import List
+import collections.abc
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, accuracy_score
 import matplotlib.pyplot as plt
+from tqdm import tqdm
+import random
 from Model.layers.input import InputLayer
 from Model.layers.hidden import HiddenLayer
 from Model.loss.square_loss import SquareLoss
@@ -27,11 +32,17 @@ from Model.evaluate.evaluate import evaluate_model
 # the same learning rate), and still got a good result from the network. So, it seems
 # like increasing the number of layers allows me to decrease the number of iterations by
 # a lot, making training much faster.
+
+# I increased the number of iterations from 4500 to 5000 because the R-squared value wasn't as high as
+# I'd like (just barely 0.9).
+# Like in q3_a, with 5 layers I could get a better or equivalent result with less iterations
+# than with 3 layers (5000 vs 2800)
+is_3_hidden_layers = False
 Number_of_iterations_3layers = 5000 # Experiment to pick your own number of ITERATIONS = batch size
-Number_of_iterations_5layers = 2000
+Number_of_iterations_5layers = 2800
 # The number of iterations were reduced by a half (from 10000 to 5000), though the
 # learning rate was adjusted to 0.005.
-Step_size = 0.005 # Experiment to pick your own STEP number = learning rate
+learning_rate = 0.005 # Experiment to pick your own STEP number = learning rate
 
 class Network(BaseNetwork):
     # TODO: you might need to pass additional arguments to init for prob 2, 3, 4 and mnist
@@ -40,24 +51,17 @@ class Network(BaseNetwork):
         super().__init__()
         # TODO: define your network architecture here
         data = data_layer.forward()
-        self.input_layer = InputLayer(data_layer)
-        print("data shape in network", data.shape)
-        self.hidden_layer1 = HiddenLayer(self.input_layer, hidden_units[0])
-        # For prob 3 and 4:
-        # layers.ModuleList can be used to add arbitrary number of layers to the network
-        # e.g.:
-        # self.MY_MODULE_LIST = layers.ModuleList()
-        # for i in range(N):
-        #     self.MY_MODULE_LIST.append(layers.Linear(...))
-        self.MY_MODULE_LIST = ModuleList()
-        self.MY_MODULE_LIST.append(BiasLayer(self.hidden_layer1, activation="ReLU"))
-        for i in range(hidden_layers-1):
-            self.MY_MODULE_LIST.append(HiddenLayer(self.MY_MODULE_LIST[-1], hidden_units[i+1]))
-            self.MY_MODULE_LIST.append(BiasLayer(self.MY_MODULE_LIST[-1], activation="ReLU"))
 
-        self.output_layer1 = OutputLayer(self.MY_MODULE_LIST[-1], 1)
+        self.MY_MODULE_LIST = ModuleList()
+        self.MY_MODULE_LIST.append(InputLayer(data_layer))
+        for i in range(hidden_layers):
+            self.MY_MODULE_LIST.append(HiddenLayer(input_dimension=self.MY_MODULE_LIST[-1],
+                                                   output_dimension=hidden_units[i]))
+            self.MY_MODULE_LIST.append(BiasLayer(input_layer=self.MY_MODULE_LIST[-1], activation="ReLU"))
+
+        self.MY_MODULE_LIST.append(OutputLayer(input_layer=self.MY_MODULE_LIST[-1], num_out_features=1))
         # TODO: always call self.set_output_layer with the output layer of this network (usually the last layer)
-        self.set_output_layer(self.output_layer1)
+        self.set_output_layer(self.MY_MODULE_LIST[-1])
 
 
 class Trainer:
@@ -78,104 +82,11 @@ class Trainer:
         network = Network(data_layer, hidden_units, hidden_layers)
         return network
 
-    def net_setup(self, training_data, hidden_units, hidden_layers):
-        x, y = training_data
+    def net_setup(self, training_data):
+        features, labels = training_data
         # TODO: define input data layer
-        self.data_layer = Data(x)
+        self.data_layer = Data(features)
         # TODO: construct the network. you don't have to use define_network.
-        params = {"hidden_units" : hidden_units, "hidden_layers" : hidden_layers}
-        self.network = self.define_network(self.data_layer, params)
-        # TODO: use the appropriate loss function here
-        self.loss_layer = SquareLoss(self.network.get_output_layer(), labels=y)
-        # TODO: construct the optimizer class here. You can retrieve all modules with parameters (thus need to be optimized be the optimizer) by "network.get_modules_with_parameters()"
-        # change to adam
-        self.optimizer = AdamSolver(learning_rate=Step_size, modules=self.network.get_modules_with_parameters())
-        return self.data_layer, self.network, self.loss_layer, self.optimizer
-
-    def train_step(self):
-        # TODO: train the network for a single iteration
-        # you have to return loss for the function
-        loss = self.loss_layer.forward()
-
-        self.loss_layer.backward()
-
-        self.optimizer.step()
-
-        return loss
-
-    def train(self, num_iter):
-        train_losses = []
-        # TODO: train the network for num_iter iterations. You should append the loss of each iteration to train_losses.
-        for iter in range(num_iter):
-            train_loss = self.train_step()
-            train_losses.append(train_loss)
-            print("Training Step: ", iter)
-
-        # you have to return train_losses for the function
-        return train_losses
-
-def plot_graph(dataset, pred_line=None, plot_title_num=1, losses=None):
-    plots = 2 if losses != None else 1
-
-    fig = plt.figure(figsize=(8 * plots, 6))
-
-    X, y = dataset['X'], dataset['y']
-
-    ax1 = fig.add_subplot(1, plots, 1)
-
-    scatter1 = ax1.scatter(X, y, alpha=0.8)  # Plot the original set of datapoints
-
-    if (pred_line != None):
-
-        x_line, y_line = pred_line['x_line'], pred_line['y_line']
-
-        scatter2 = ax1.scatter(x_line, y_line, color='red', alpha=0.8)
-        ax1.legend([scatter1, scatter2], ['Actual', 'Predicted'])
-        ax1.set_title('Predicted Line on set of Datapoints plot {}'.format(plot_title_num))
-
-    else:
-        ax1.set_title('Plot of Datapoints generated')
-
-    ax1.set_xlabel('x')
-    ax1.set_ylabel('y')
-
-    if (losses != None):
-        ax2 = fig.add_subplot(1, plots, 2)
-        ax2.plot(np.arange(len(losses)), losses, marker='o')
-
-        ax2.set_xlabel('Epoch')
-        ax2.set_ylabel('Loss')
-        ax2.set_title('Loss')
-
-    plt.show()
-
-
-# Function to plot predicted line
-def plot_pred_line(X, y, y_pred, plot_title_num, losses=None):
-    x_line = X
-    y_line = y_pred
-
-    plot_graph(dataset={'X': X, 'y': y}, pred_line={'x_line': x_line, 'y_line': y_line}, plot_title_num=plot_title_num)
-
-    return
-
-# DO NOT CHANGE THE NAME OF THIS FUNCTION
-def main(test=False):
-    # setup the trainer
-    trainer = Trainer()
-
-    data = q2_b()
-
-    # 3 or 5
-    is_3_hidden_layers = False;
-
-    # DO NOT REMOVE THESE IF/ELSE
-    if not test:
-        # Your code goes here.
-        # epoch and batch numbers go here.
-
-        # setup network
-        # testing with 3 hidden layers:
         if is_3_hidden_layers:
             hidden_units = [128, 64, 32]
             hidden_layers = 3
@@ -183,39 +94,99 @@ def main(test=False):
             # testing with 5 hidden layers
             hidden_units = [128, 64, 32, 16, 8]
             hidden_layers = 5
+        params = {"hidden_units" : hidden_units, "hidden_layers" : hidden_layers}
+        self.network = self.define_network(self.data_layer, parameters=params)
+        # TODO: use the appropriate loss function here
+        self.loss_layer = SquareLoss(self.network.get_output_layer(), labels=labels)
+        # TODO: construct the optimizer class here. You can retrieve all modules with parameters (thus need to be optimized be the optimizer) by "network.get_modules_with_parameters()"
+        # change to adam
+        self.optimizer = AdamSolver(learning_rate=learning_rate, modules=self.network.get_modules_with_parameters())
+        return self.data_layer, self.network, self.loss_layer, self.optimizer
 
-        data_layer, network, loss_layer, optimizer = trainer.net_setup(training_data=data['train'], hidden_units=hidden_units, hidden_layers=hidden_layers)
+    def train_step(self):
+        # TODO: train the network for a single iteration
+        # you have to return loss for the function
+        loss = self.loss_layer.forward()
+        self.loss_layer.backward()
+        self.optimizer.step()
 
-        if is_3_hidden_layers:
-            losses = trainer.train(Number_of_iterations_3layers)
-        else:
-            losses = trainer.train(Number_of_iterations_5layers)
+        return loss
 
-        # Loss plot
-        plt.plot(losses)
-        plt.ylabel("Loss of Neural Network")
-        plt.xlabel("Number of Iterations (Epochs)")
+    def train(self, num_iter):
+        train_losses = []
+        # TODO: train the network for num_iter iterations. You should append the loss of each iteration to train_losses.
+        for _ in tqdm(range(num_iter), desc="Training", leave=True):
+            train_losses.append(self.train_step())
+
+        # you have to return train_losses for the function
+        return train_losses
+
+
+def visualize_data(x_test, y_test, y_pred):
+    # Number of features
+    num_features = x_test.shape[1]
+
+    # For each feature, plot actual vs predicted
+    for i in range(num_features):
+        # Create a subplot for each feature
+        fig = plt.figure(figsize=(8, 4))
+
+        ax = fig.add_subplot(1, 1, 1)
+        ax.scatter(x_test[:, i], y_test, alpha=0.5, label='Actual')
+        ax.scatter(x_test[:, i], y_pred, alpha=0.5, label='Predicted', marker='x')
+        ax.set_xlabel(f'Feature_{i + 1}')
+        ax.set_ylabel('Target')
+        ax.legend()
+        ax.set_title(f'Scatter Plot for Feature_{i + 1}')
+        plt.tight_layout()
         plt.show()
 
-        xtest, ytest = data["test"]
-        network.input_layer = InputLayer(Data(xtest))
-        network.hidden_layer1.input_layer = network.input_layer
 
-        y_preds = network.output_layer1.forward()
+# DO NOT CHANGE THE NAME OF THIS FUNCTION
+def main(test=False):
+    # setup the trainer
+    trainer = Trainer()
 
-        metrics = evaluate_model(ytest, y_preds)
-        print(metrics)
+    # DO NOT REMOVE THESE IF/ELSE
+    if not test:
+        # Your code goes here.
+        data = q2_b()
+        data_layer, network, loss_layer, optimizer = trainer.net_setup(data['train'])
 
-        plot_pred_line(xtest[:, [0]], ytest, y_preds, 1)
-        plot_pred_line(xtest[:, [1]], ytest, y_preds, 2)
-        plot_pred_line(xtest[:, [2]], ytest, y_preds, 3)
-        plot_pred_line(xtest[:, [3]], ytest, y_preds, 4)
-        plot_pred_line(xtest[:, [4]], ytest, y_preds, 5)
+        # Since I needed to test 3 vs 5 hidden layers, I had to edit this part of the main function
+        if is_3_hidden_layers:
+            loss = trainer.train(Number_of_iterations_3layers)
+        else:
+            loss = trainer.train(Number_of_iterations_5layers)
 
-        pass
+        plt.plot(loss)
+        plt.ylabel('Loss of NN')
+        plt.xlabel('Number of Iterations')
+        plt.show()
+
+        # Now let's use the test data
+        x_test, y_test = data['test']
+        test_data_layer = Data(x_test)
+        network.input_layer = InputLayer(test_data_layer)
+        trainer.data_layer.set_data(network.input_layer)
+        trainer.network.MY_MODULE_LIST[1].input_layer = network.input_layer
+
+        # Get predictions for test data
+        y_pred = network.MY_MODULE_LIST[-1].forward()
+
+        metrics = evaluate_model(y_test, y_pred)
+        # Print the metrics for review
+        for key, value in metrics.items():
+            print(f"{key}: {value}")
+
+        visualize_data(x_test, y_test, y_pred)
+
     else:
-        # DO NOT CHANGE THIS BRANCH!
-        pass
+        # DO NOT CHANGE THIS BRANCH! This branch is used for autograder.
+        out = {
+            'trainer': trainer
+        }
+        return out
 
 
 if __name__ == "__main__":

@@ -26,6 +26,7 @@ class LinearLayer:
         self.input_layer = input_layer
         num_data, num_in_features = input_layer.output_dimension
         self.output_dimension = np.array([num_data, number_out_features])
+        np.random.seed(42)
         # Declare the weight matrix and initialize it
         self.W = np.random.randn(num_in_features, number_out_features) / np.sqrt(num_in_features)
         #print(self.W)

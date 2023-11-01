@@ -1,6 +1,11 @@
 from Model.layers.network import BaseNetwork
 import numpy as np
+from typing import List
+import collections.abc
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, accuracy_score
 import matplotlib.pyplot as plt
+from tqdm import tqdm
+import random
 from Model.layers.input import InputLayer
 from Model.layers.hidden import HiddenLayer
 from Model.loss.square_loss import SquareLoss
@@ -12,18 +17,8 @@ from Data.data import Data
 from Data.generator import q2_b
 from Model.evaluate.evaluate import evaluate_model
 
-# When he says logistic activation function, he means sigmoid
-
-# First tested with 3000 iterations, saw from the loss graph it hit near 0 loss much sooner,
-# so I decreased the number of iterations to 100. Saw I didn't need 100 iterations either,
-# decreased iterations some more. But the predicated values still looked bad, so I then changed
-# my learning rate (decreased it). The line started looking better, but now I needed to increase
-# my number of iterations.
-# I started with a default value of hidden units equal to 128
-# This was much more difficult to do, thoguh after I saw that my line was
-# overfitting, I decreased the step_size.
-Number_of_iterations = 15000 # Experiment to pick your own number of ITERATIONS = batch size
-Step_size = 0.01 # Experiment to pick your own STEP number = learning rate
+Number_of_iterations = 20000
+learning_rate = 0.01
 
 class Network(BaseNetwork):
     # TODO: you might need to pass additional arguments to init for prob 2, 3, 4 and mnist
@@ -33,10 +28,9 @@ class Network(BaseNetwork):
         # TODO: define your network architecture here
         data = data_layer.forward()
         self.input_layer = InputLayer(data_layer)
-        print("data shape in network", data.shape)
-        self.hidden_layer1 = HiddenLayer(self.input_layer, hidden_units)
-        self.bias_layer1 = BiasLayer(self.hidden_layer1, activation="ReLU")
-        self.output_layer1 = OutputLayer(self.bias_layer1, 1)
+        self.hidden_layer1 = HiddenLayer(input_dimension=self.input_layer, output_dimension=hidden_units)
+        self.bias_layer1 = BiasLayer(input_layer=self.hidden_layer1, activation="ReLU")
+        self.output_layer1 = OutputLayer(input_layer=self.bias_layer1, num_out_features=1)
         # TODO: always call self.set_output_layer with the output layer of this network (usually the last layer)
         self.set_output_layer(self.output_layer1)
 
@@ -58,27 +52,24 @@ class Trainer:
         network = Network(data_layer, hidden_units)
         return network
 
-    def net_setup(self, training_data, hidden_units):
-        x, y = training_data
+    def net_setup(self, training_data):
+        features, labels = training_data
         # TODO: define input data layer
-        self.data_layer = Data(x)
+        self.data_layer = Data(features)
         # TODO: construct the network. you don't have to use define_network.
-        params = {"hidden_units" : hidden_units}
-        self.network = self.define_network(self.data_layer, params)
+        self.network = self.define_network(self.data_layer, parameters={'hidden_units': 256})
         # TODO: use the appropriate loss function here
-        self.loss_layer = SquareLoss(self.network.get_output_layer(), labels=y)
+        self.loss_layer = SquareLoss(self.network.get_output_layer(), labels=labels)
         # TODO: construct the optimizer class here. You can retrieve all modules with parameters (thus need to be optimized be the optimizer) by "network.get_modules_with_parameters()"
         # change to adam
-        self.optimizer = AdamSolver(learning_rate=Step_size, modules=self.network.get_modules_with_parameters())
+        self.optimizer = AdamSolver(learning_rate=learning_rate, modules=self.network.get_modules_with_parameters())
         return self.data_layer, self.network, self.loss_layer, self.optimizer
 
     def train_step(self):
         # TODO: train the network for a single iteration
         # you have to return loss for the function
         loss = self.loss_layer.forward()
-
         self.loss_layer.backward()
-
         self.optimizer.step()
 
         return loss
@@ -86,100 +77,71 @@ class Trainer:
     def train(self, num_iter):
         train_losses = []
         # TODO: train the network for num_iter iterations. You should append the loss of each iteration to train_losses.
-        for iter in range(num_iter):
-            train_loss = self.train_step()
-            train_losses.append(train_loss)
-            print("Training Step: ", iter)
+        for _ in tqdm(range(num_iter), desc="Training", leave=True):
+            train_losses.append(self.train_step())
 
         # you have to return train_losses for the function
         return train_losses
 
 
-def plot_graph(dataset, pred_line=None, plot_title_num=1, losses=None):
-    plots = 2 if losses != None else 1
+def visualize_data(x_test, y_test, y_pred):
+    # Number of features
+    num_features = x_test.shape[1]
 
-    fig = plt.figure(figsize=(8 * plots, 6))
+    # For each feature, plot actual vs predicted
+    for i in range(num_features):
+        # Create a subplot for each feature
+        fig = plt.figure(figsize=(8, 4))
 
-    X, y = dataset['X'], dataset['y']
+        ax = fig.add_subplot(1, 1, 1)
+        ax.scatter(x_test[:, i], y_test, alpha=0.5, label='Actual')
+        ax.scatter(x_test[:, i], y_pred, alpha=0.5, label='Predicted', marker='x')
+        ax.set_xlabel(f'Feature_{i + 1}')
+        ax.set_ylabel('Target')
+        ax.legend()
+        ax.set_title(f'Scatter Plot for Feature_{i + 1}')
+        plt.tight_layout()
+        plt.show()
 
-    ax1 = fig.add_subplot(1, plots, 1)
-
-    scatter1 = ax1.scatter(X, y, alpha=0.8)  # Plot the original set of datapoints
-
-    if (pred_line != None):
-
-        x_line, y_line = pred_line['x_line'], pred_line['y_line']
-
-        scatter2 = ax1.scatter(x_line, y_line, color='red', alpha=0.8)
-        ax1.legend([scatter1, scatter2], ['Actual', 'Predicted'])
-        ax1.set_title('Predicted Line on set of Datapoints plot {}'.format(plot_title_num))
-
-    else:
-        ax1.set_title('Plot of Datapoints generated')
-
-    ax1.set_xlabel('x')
-    ax1.set_ylabel('y')
-
-    if (losses != None):
-        ax2 = fig.add_subplot(1, plots, 2)
-        ax2.plot(np.arange(len(losses)), losses, marker='o')
-
-        ax2.set_xlabel('Epoch')
-        ax2.set_ylabel('Loss')
-        ax2.set_title('Loss')
-
-    plt.show()
-
-
-# Function to plot predicted line
-def plot_pred_line(X, y, y_pred, plot_title_num, losses=None):
-    x_line = X
-    y_line = y_pred
-
-    plot_graph(dataset={'X': X, 'y': y}, pred_line={'x_line': x_line, 'y_line': y_line}, plot_title_num=plot_title_num)
-
-    return
 
 # DO NOT CHANGE THE NAME OF THIS FUNCTION
 def main(test=False):
     # setup the trainer
     trainer = Trainer()
 
-    data = q2_b()
-
     # DO NOT REMOVE THESE IF/ELSE
     if not test:
         # Your code goes here.
-
-        # setup network
-        data_layer, network, loss_layer, optimizer = trainer.net_setup(training_data=data['train'], hidden_units=256)
-        losses = trainer.train(Number_of_iterations)
-
-        # Loss plot
-        plt.plot(losses)
-        plt.ylabel("Loss of Neural Network")
-        plt.xlabel("Number of Iterations (Epochs)")
+        data = q2_b()
+        data_layer, network, loss_layer, optimizer = trainer.net_setup(data['train'])
+        loss = trainer.train(Number_of_iterations)
+        plt.plot(loss)
+        plt.ylabel('Loss of NN')
+        plt.xlabel('Number of Iterations')
         plt.show()
 
-        xtest, ytest = data["test"]
-        network.input_layer = InputLayer(Data(xtest))
+        # Now let's use the test data
+        x_test, y_test = data['test']
+        test_data_layer = Data(x_test)
+        network.input_layer = InputLayer(test_data_layer)
         network.hidden_layer1.input_layer = network.input_layer
 
-        y_preds = network.output_layer1.forward()
+        # Get predictions for test data
+        y_pred = network.output_layer1.forward()
 
-        metrics = evaluate_model(ytest, y_preds)
-        print(metrics)
+        metrics = evaluate_model(y_test, y_pred)
+        # Print the metrics for review
+        for key, value in metrics.items():
+            print(f"{key}: {value}")
 
-        plot_pred_line(xtest[:, [0]], ytest, y_preds, 1)
-        plot_pred_line(xtest[:, [1]], ytest, y_preds, 2)
-        plot_pred_line(xtest[:, [2]], ytest, y_preds, 3)
-        plot_pred_line(xtest[:, [3]], ytest, y_preds, 4)
-        plot_pred_line(xtest[:, [4]], ytest, y_preds, 5)
+        visualize_data(x_test, y_test, y_pred)
 
-        pass
     else:
-        # DO NOT CHANGE THIS BRANCH!
-        pass
+        # DO NOT CHANGE THIS BRANCH! This branch is used for autograder.
+        out = {
+            'trainer': trainer
+        }
+        return out
 
 
 if __name__ == "__main__":

@@ -26,6 +26,7 @@ class CNNModel(nn.Module):
         
         # Define the model architecture here
         # MNIST image input size batch * 28 * 28 (one input channel)
+        # I'm not doing MNIST.
         
         # TODO Define CNN layers below
         self.conv = nn.Sequential(
