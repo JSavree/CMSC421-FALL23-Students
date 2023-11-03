@@ -23,21 +23,19 @@ from Model.evaluate.evaluate import evaluate_model
 # When he says logistic activation function, he means sigmoid
 
 
-# I started with a default value of hidden units equal to 128, and halved the number of
-# hidden units for each layer.
-# I also reduced my number of iterations to half of what I did for q2_a, since
-# I expected more layers (3 layers used in this case)to take a lower number of iterations
-# to reach a good result.
-# When using 5 layers, I halved the number of iterations once again (but still keeping
-# the same learning rate), and still got a good result from the network. So, it seems
-# like increasing the number of layers allows me to decrease the number of iterations by
-# a lot, making training much faster.
+# I started at 4500 iterations, but the result was bad. So I tried reducing the learning rate, which
+# gave a much better result. From there, I continued increasing the number of iterations, first to 6000
+# which improved even further, but also showed a loss plot that still had much room for improvement
+# So, I then increased it to 7500 iterations
 is_3_hidden_layers = True
-Number_of_iterations_3layers = 4500 # Experiment to pick your own number of ITERATIONS = batch size
+Number_of_iterations_3layers = 7000 # Experiment to pick your own number of ITERATIONS = batch size
 Number_of_iterations_5layers = 2500
-# The number of iterations were reduced by a half (from 10000 to 5000), though the
-# learning rate was adjusted to 0.005.
-learning_rate = 0.00001 # Experiment to pick your own STEP number = learning rate
+# For 5 layers, I needed to adjust not just the number of iterations, but also the learning rate
+# (needed to reduce it to 0.000001 instead of 0.00001)
+if is_3_hidden_layers:
+    learning_rate = 0.00001
+else:
+    learning_rate = 0.000001
 
 class Network(BaseNetwork):
     # TODO: you might need to pass additional arguments to init for prob 2, 3, 4 and mnist

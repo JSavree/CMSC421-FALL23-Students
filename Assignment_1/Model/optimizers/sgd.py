@@ -36,11 +36,15 @@ class SGDSolver:
         The method should update the parameters of all layers in the 'modules' list according
         to the SGD update rule.
         """
-        
+        # Loop through each module (layer) present in the `self.modules` list.
+        # The formula to update weights is: W = W - lr * mean(G)
+        # Replace the weights of the module (module.W) with the updated weights.
+
+        # TODO 4: For each module, compute the mean gradient of its weights. This can be done using `np.mean(gradient of the module, axis=0)` where `module.G` represents the gradient of the module.
+        # TODO 5: Use the computed mean gradient to update the module's weights using the SGD formula. Remember to scale the mean gradient with the learning rate `self.learning_rate` W = W - lr * mean gradient.
 
         for module in self.modules:
             # TODO: Loop through each module in self.modules and update its weight `W` using its gradient `G`.
-            module.W = module.W - (self.learning_rate * np.mean(module.G))
+            module.W = module.W - (self.learning_rate * np.mean(module.G, axis=0))
 
-            pass
 

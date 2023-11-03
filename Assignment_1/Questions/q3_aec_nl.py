@@ -33,11 +33,11 @@ from Model.evaluate.evaluate import evaluate_model
 # like increasing the number of layers allows me to decrease the number of iterations by
 # a lot, making training much faster.
 is_3_hidden_layers = True
-Number_of_iterations_3layers = 5000 # Experiment to pick your own number of ITERATIONS = batch size
-Number_of_iterations_5layers = 2000
+Number_of_iterations_3layers = 7000 # Experiment to pick your own number of ITERATIONS = batch size
+Number_of_iterations_5layers = 2500
 # The number of iterations were reduced by a half (from 10000 to 5000), though the
 # learning rate was adjusted to 0.005.
-learning_rate = 0.005 # Experiment to pick your own STEP number = learning rate
+learning_rate = 0.0001 # Experiment to pick your own STEP number = learning rate
 
 class Network(BaseNetwork):
     # TODO: you might need to pass additional arguments to init for prob 2, 3, 4 and mnist
