@@ -159,14 +159,15 @@ def main():
         load_checkpoint=False,
         activation='relu',
         channel_out1=64,
-        channel_out2=64,
+        channel_out2=64, # change these values
         stride=1,
         max_stride=2,
         ckp_path='checkpoint',
-        k_size=4,
+        k_size=4, # I can change kernel size as you move across the layers.
         pooling_size=2,
     )
-
+    # For hidden layers and convolutional layers, I want to vary the number of hidden units or output channels
+    # e.g, decreasing in each layer, or decrease then increase the decrease, etc. (repeating this pattern)
     use_cuda = torch.cuda.is_available()
     device = torch.device("cuda" if use_cuda else "cpu")
     # use_mps = torch.backends.mps.is_available()

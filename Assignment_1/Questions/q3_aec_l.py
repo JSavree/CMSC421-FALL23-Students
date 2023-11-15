@@ -27,6 +27,8 @@ from Model.evaluate.evaluate import evaluate_model
 # gave a much better result. From there, I continued increasing the number of iterations, first to 6000
 # which improved even further, but also showed a loss plot that still had much room for improvement
 # So, I then increased it to 7500 iterations
+
+# number of iterations are too much
 is_3_hidden_layers = True
 Number_of_iterations_3layers = 7000 # Experiment to pick your own number of ITERATIONS = batch size
 Number_of_iterations_5layers = 2500
@@ -35,7 +37,8 @@ Number_of_iterations_5layers = 2500
 if is_3_hidden_layers:
     learning_rate = 0.00001
 else:
-    learning_rate = 0.000001
+    learning_rate = 0.000001 #.01 and .0001
+# So, I only want a few hundred iterations
 
 class Network(BaseNetwork):
     # TODO: you might need to pass additional arguments to init for prob 2, 3, 4 and mnist

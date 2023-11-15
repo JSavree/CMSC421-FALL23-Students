@@ -37,14 +37,17 @@ class CNNModel(nn.Module):
         # - Ensure the depth and the sizes of the feature maps after each layer align with the desired architecture.
         # Convolutional Layers
         self.conv = nn.Sequential(
-            # 3 convolutional layers
+            # 3 convolutional layers, try using batchnorms
             nn.Conv2d(in_channels=3, out_channels=args.channel_out1, kernel_size=args.k_size), # 3 input channels, since RGB
+            nn.BatchNorm2d(args.channel_out1),
             nn.ReLU(),
             nn.MaxPool2d(args.pooling_size, stride=args.max_stride),
             nn.Conv2d(in_channels=args.channel_out1, out_channels=args.channel_out2, kernel_size=args.k_size),
+            nn.BatchNorm2d(args.channel_out2),
             nn.ReLU(),
             nn.MaxPool2d(args.pooling_size, stride=args.max_stride),
             nn.Conv2d(in_channels=args.channel_out2, out_channels=args.channel_out2, kernel_size=args.k_size),
+            nn.BatchNorm2d(args.channel_out2),
             nn.ReLU(),
             nn.MaxPool2d(args.pooling_size, stride=args.max_stride)
         )

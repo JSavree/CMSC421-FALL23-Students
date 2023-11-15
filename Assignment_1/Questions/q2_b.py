@@ -17,8 +17,14 @@ from Data.data import Data
 from Data.generator import q2_b
 from Model.evaluate.evaluate import evaluate_model
 
-Number_of_iterations = 20000
-learning_rate = 0.01
+Number_of_iterations = 5000 # 20000 is too many iterations, I should be around 2000 iterations?
+learning_rate = 0.02
+# From my experimenting, the first thing I usually tune is the learning rate
+# q2_b_hu1000_lr02_5000iter_comparison_plot_1
+# Takes about half an hour
+# I should focus on experimentation
+# report the results of testing the various hyperparameter values, and then explain
+# why those results may be happening. Basically, try and synthesize my results.
 
 class Network(BaseNetwork):
     # TODO: you might need to pass additional arguments to init for prob 2, 3, 4 and mnist
@@ -57,7 +63,8 @@ class Trainer:
         # TODO: define input data layer
         self.data_layer = Data(features)
         # TODO: construct the network. you don't have to use define_network.
-        self.network = self.define_network(self.data_layer, parameters={'hidden_units': 256})
+        # increase hidden units
+        self.network = self.define_network(self.data_layer, parameters={'hidden_units': 800})
         # TODO: use the appropriate loss function here
         self.loss_layer = SquareLoss(self.network.get_output_layer(), labels=labels)
         # TODO: construct the optimizer class here. You can retrieve all modules with parameters (thus need to be optimized be the optimizer) by "network.get_modules_with_parameters()"

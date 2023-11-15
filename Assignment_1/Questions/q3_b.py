@@ -37,12 +37,15 @@ from Model.evaluate.evaluate import evaluate_model
 # I'd like (just barely 0.9).
 # Like in q3_a, with 5 layers I could get a better or equivalent result with less iterations
 # than with 3 layers (5000 vs 2800)
-is_3_hidden_layers = False
-Number_of_iterations_3layers = 5000 # Experiment to pick your own number of ITERATIONS = batch size
+is_3_hidden_layers = True
+Number_of_iterations_3layers = 3000 # Experiment to pick your own number of ITERATIONS = batch size
 Number_of_iterations_5layers = 2800
 # The number of iterations were reduced by a half (from 10000 to 5000), though the
 # learning rate was adjusted to 0.005.
-learning_rate = 0.005 # Experiment to pick your own STEP number = learning rate
+learning_rate = 0.01 # Experiment to pick your own STEP number = learning rate
+
+# trial and error is why I'm trying different hyperparameters.
+#
 
 class Network(BaseNetwork):
     # TODO: you might need to pass additional arguments to init for prob 2, 3, 4 and mnist
@@ -88,7 +91,7 @@ class Trainer:
         self.data_layer = Data(features)
         # TODO: construct the network. you don't have to use define_network.
         if is_3_hidden_layers:
-            hidden_units = [128, 64, 32]
+            hidden_units = [30, 20, 15]
             hidden_layers = 3
         else:
             # testing with 5 hidden layers
