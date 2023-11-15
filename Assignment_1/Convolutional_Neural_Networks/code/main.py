@@ -151,7 +151,7 @@ def main():
         num_epochs=1,
         fc_hidden1=100,
         fc_hidden2=50,
-        learning_rate=0.002,
+        learning_rate=0.01, # prev 0.002
         decay=0.5,
         batch_size=100,
         dropout=0.4,
