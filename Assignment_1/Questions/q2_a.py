@@ -18,8 +18,11 @@ from Data.generator import q2_a
 from Model.evaluate.evaluate import evaluate_model
 np.random.seed(42)
 
-Number_of_iterations = 15000
-learning_rate = 0.01
+Number_of_iterations = 2800
+learning_rate = 0.05
+hu = 650 # number of hidden units
+
+plots_file_path = "C:/Users/aqwan/GitHub/CMSC421-FALL23-Students/Assignment_1/plots"
 
 class Network(BaseNetwork):
     # TODO: you might need to pass additional arguments to init for prob 2, 3, 4 and mnist
@@ -58,7 +61,7 @@ class Trainer:
         # TODO: define input data layer
         self.data_layer = Data(features)
         # TODO: construct the network. you don't have to use define_network.
-        self.network = self.define_network(self.data_layer, parameters={'hidden_units': 256})
+        self.network = self.define_network(self.data_layer, parameters={'hidden_units': hu})
         # TODO: use the appropriate loss function here
         self.loss_layer = SquareLoss(self.network.get_output_layer(), labels=labels)
         # TODO: construct the optimizer class here. You can retrieve all modules with parameters (thus need to be optimized be the optimizer) by "network.get_modules_with_parameters()"
@@ -80,6 +83,7 @@ class Trainer:
         # TODO: train the network for num_iter iterations. You should append the loss of each iteration to train_losses.
         for _ in tqdm(range(num_iter), desc="Training", leave=True):
             train_losses.append(self.train_step())
+            #print(train_losses[0])
 
         # you have to return train_losses for the function
         return train_losses
@@ -99,6 +103,8 @@ def main(test=False):
         plt.plot(loss)
         plt.ylabel('Loss of NN')
         plt.xlabel('Number of Iterations')
+        file_name = plots_file_path + "/q2_a_hu{}_lr{}_iters{}_loss_plot.png".format(hu, learning_rate, Number_of_iterations)
+        plt.savefig(file_name)
         plt.show()
 
         # Now let's use the test data
@@ -112,6 +118,7 @@ def main(test=False):
 
         metrics = evaluate_model(y_test, y_pred)
         # Print the metrics for review
+        print("Iterations: {}, Learning Rate: {}, Hidden Units: {}".format(Number_of_iterations, learning_rate, hu))
         for key, value in metrics.items():
             print(f"{key}: {value}")
 
@@ -123,6 +130,9 @@ def main(test=False):
         plt.ylabel('Target (y)')
         plt.title('Test Data and Model Predictions')
         plt.legend()
+        file_name = plots_file_path + "/q2_a_hu{}_lr{}_iters{}_comparison_plot.png".format(hu, learning_rate,
+                                                                           Number_of_iterations)
+        plt.savefig(file_name)
         plt.show()
 
     else:

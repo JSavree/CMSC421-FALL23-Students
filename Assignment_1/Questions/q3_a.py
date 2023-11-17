@@ -22,12 +22,26 @@ from Model.evaluate.evaluate import evaluate_model
 
 # With 5 layers, I was able to produce a better result and use less iterations
 # rewrite 3b on my report
-is_3_hidden_layers = False
-Number_of_iterations_3layers = 4500
-Number_of_iterations_5layers = 2500
+is_3_hidden_layers = True
+Number_of_iterations = 0
 # The number of iterations were reduced by a half (from 10000 to 5000), though the
 # learning rate was adjusted to 0.005.
 learning_rate = 0.005
+
+layers = 0
+hus = [0]
+if is_3_hidden_layers:
+    Number_of_iterations = 2500
+    hus = [30, 20, 15]
+    layers = 3
+else:
+    # testing with 5 hidden layers
+    Number_of_iterations = 2000
+    hus = [30, 20, 15, 10, 8]
+    layers = 5
+
+plots_file_path = "C:/Users/aqwan/GitHub/CMSC421-FALL23-Students/Assignment_1/plots"
+
 
 class Network(BaseNetwork):
     # TODO: you might need to pass additional arguments to init for prob 2, 3, 4 and mnist
@@ -72,14 +86,7 @@ class Trainer:
         # TODO: define input data layer
         self.data_layer = Data(features)
         # TODO: construct the network. you don't have to use define_network.
-        if is_3_hidden_layers:
-            hidden_units = [128, 64, 32]
-            hidden_layers = 3
-        else:
-            # testing with 5 hidden layers
-            hidden_units = [128, 64, 32, 16, 8]
-            hidden_layers = 5
-        params = {"hidden_units" : hidden_units, "hidden_layers" : hidden_layers}
+        params = {"hidden_units" : hus, "hidden_layers" : layers}
         self.network = self.define_network(self.data_layer, parameters=params)
         # TODO: use the appropriate loss function here
         self.loss_layer = SquareLoss(self.network.get_output_layer(), labels=labels)
@@ -120,14 +127,14 @@ def main(test=False):
         data_layer, network, loss_layer, optimizer = trainer.net_setup(data['train'])
 
         # Since I needed to test 3 vs 5 hidden layers, I had to edit this part of the main function
-        if is_3_hidden_layers:
-            loss = trainer.train(Number_of_iterations_3layers)
-        else:
-            loss = trainer.train(Number_of_iterations_5layers)
+        loss = trainer.train(Number_of_iterations)
 
         plt.plot(loss)
         plt.ylabel('Loss of NN')
         plt.xlabel('Number of Iterations')
+        file_name = plots_file_path + "/q3_a_{}layer_lr{}_iters{}_loss_plot.png".format(layers, learning_rate,
+                                                                                        Number_of_iterations)
+        plt.savefig(file_name)
         plt.show()
 
         # Now let's use the test data
@@ -142,6 +149,8 @@ def main(test=False):
 
         metrics = evaluate_model(y_test, y_pred)
         # Print the metrics for review
+        print("Iterations: {}, Learning Rate: {}, Hidden Units: {}, Hidden Layers: {}".format(Number_of_iterations,
+                                                                                              learning_rate, hus, layers))
         for key, value in metrics.items():
             print(f"{key}: {value}")
 
@@ -153,6 +162,9 @@ def main(test=False):
         plt.ylabel('Target (y)')
         plt.title('Test Data and Model Predictions')
         plt.legend()
+        file_name = plots_file_path + "/q3_a_{}layer_lr{}_iters{}_comparison_plot.png".format(layers, learning_rate,
+                                                                                        Number_of_iterations)
+        plt.savefig(file_name)
         plt.show()
 
     else:

@@ -21,6 +21,8 @@ from Model.evaluate.evaluate import evaluate_model
 Number_of_iterations = 3000
 learning_rate = 0.05
 
+plots_file_path = "C:/Users/aqwan/GitHub/CMSC421-FALL23-Students/Assignment_1/plots"
+
 
 class Network(BaseNetwork):
     def __init__(self, data_layer):
@@ -100,6 +102,8 @@ def main(test=False):
         plt.plot(loss)
         plt.ylabel('Loss of NN')
         plt.xlabel('Number of Iterations')
+        file_name = plots_file_path + "/q1_a_lr{}_iters{}_loss_plot.png".format(learning_rate, Number_of_iterations)
+        plt.savefig(file_name)
         plt.show()
 
         # Now let's use the test data
@@ -124,6 +128,9 @@ def main(test=False):
         plt.ylabel('Target (y)')
         plt.title('Test Data and Model Predictions')
         plt.legend()
+        file_name = plots_file_path + "/q1_a_lr{}_iters{}_comparison_plot.png".format(learning_rate,
+                                                                                         Number_of_iterations)
+        plt.savefig(file_name)
         plt.show()
 
         pass

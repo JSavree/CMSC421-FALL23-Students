@@ -1,0 +1,365 @@
+q2_a values:
+
+15000 iterations, 256 hu, 0.01lr:
+
+Mean Absolute Error: 0.24691621956148666
+Mean Squared Error: 0.13168105420597362
+R-squared: 0.7005057733758058
+
+5000 iterations, 256 hu, 0.01lr:
+
+Mean Absolute Error: 0.2624014147317557
+Mean Squared Error: 0.16056944194958653
+R-squared: 0.6348022794459955
+
+5000 iterations, 500 hu, 0.05lr:
+
+Mean Absolute Error: 0.1500519063306562
+Mean Squared Error: 0.04589934827720474
+R-squared: 0.8956069276804713
+
+5000 iterations, 700 hu, 0.05lr:
+
+Mean Absolute Error: 0.2797973981227209
+Mean Squared Error: 0.092679117039448
+R-squared: 0.7892114347860113
+
+5000 iterations, 1000 hu, 0.01lr:
+
+Mean Absolute Error: 0.28402299890165716
+Mean Squared Error: 0.14891813723571296
+R-squared: 0.6613019039780574
+
+4000 iterations, 500 hu, 0.05lr:
+
+Mean Absolute Error: 0.2308498924028217
+Mean Squared Error: 0.07057727948805131
+R-squared: 0.8394796589002805
+
+5000 iterations, 1000 hu, 0.001lr:
+
+Mean Absolute Error: 0.30220789223426514
+Mean Squared Error: 0.16985434649002867
+R-squared: 0.6136847745673549
+
+5000 iterations, 400 hu, 0.05lr:
+
+Mean Absolute Error: 0.16592982438097523
+Mean Squared Error: 0.06648891521469337
+R-squared: 0.8487781984934711
+
+2000 iterations, 500 hu, 0.05lr:
+
+Mean Absolute Error: 0.08480116427237701
+Mean Squared Error: 0.018486072685843475
+R-squared: 0.9579554395600048
+
+1500 iterations, 500 hu, 0.05lr:
+
+Mean Absolute Error: 0.12431189734178832
+Mean Squared Error: 0.036814645780867794
+R-squared: 0.9162690947982669
+
+2500 iterations, 500 hu, 0.05lr:
+Mean Absolute Error: 0.1578208451813756
+Mean Squared Error: 0.03540425525035557
+R-squared: 0.9194768745637077
+
+2000 iterations, 600 hu, 0.05lr:
+
+Mean Absolute Error: 0.22803911666278315
+Mean Squared Error: 0.06966365715474789
+R-squared: 0.8415575934656532
+
+Iterations: 2500, Learning Rate: 0.05, Hidden Units: 600
+Mean Absolute Error: 0.1585502869074981
+Mean Squared Error: 0.03515088405164326
+R-squared: 0.9200531397801792
+
+Iterations: 3000, Learning Rate: 0.05, Hidden Units: 600
+Mean Absolute Error: 0.09092438624066503
+Mean Squared Error: 0.017420759690077142
+R-squared: 0.9603783780282881
+
+Iterations: 3500, Learning Rate: 0.05, Hidden Units: 600
+Mean Absolute Error: 0.2540469736780645
+Mean Squared Error: 0.07896090593742242
+R-squared: 0.8204120129515087
+
+Iterations: 2800, Learning Rate: 0.05, Hidden Units: 600
+Mean Absolute Error: 0.08374137062925618
+Mean Squared Error: 0.01756310697664727
+R-squared: 0.9600546246169834
+
+Iterations: 2800, Learning Rate: 0.05, Hidden Units: 650
+Mean Absolute Error: 0.07146597891381476
+Mean Squared Error: 0.013559819655367473
+R-squared: 0.9691596659418026
+
+Iterations: 3000, Learning Rate: 0.05, Hidden Units: 650
+Mean Absolute Error: 0.2507961076787369
+Mean Squared Error: 0.06992269259071289
+R-squared: 0.8409684455580031
+
+Iterations: 2000, Learning Rate: 0.05, Hidden Units: 700
+Mean Absolute Error: 0.12119515433537209
+Mean Squared Error: 0.037435767302423394
+R-squared: 0.9148564214956446
+
+Iterations: 2500, Learning Rate: 0.05, Hidden Units: 700
+Mean Absolute Error: 0.09774310106307298
+Mean Squared Error: 0.02490602662121886
+R-squared: 0.943353953033092
+
+Iterations: 2800, Learning Rate: 0.05, Hidden Units: 700
+Mean Absolute Error: 0.09397672390129361
+Mean Squared Error: 0.01823862994713853
+R-squared: 0.9585182211393981
+
+Iterations: 3000, Learning Rate: 0.05, Hidden Units: 700
+Mean Absolute Error: 0.07588932874415616
+Mean Squared Error: 0.014487709753059942
+R-squared: 0.9670492808991223
+
+Iterations: 3000, Learning Rate: 0.05, Hidden Units: 800
+Mean Absolute Error: 0.07995736359595378
+Mean Squared Error: 0.015047060452308159
+R-squared: 0.9657770986091704
+
+Iterations: 2800, Learning Rate: 0.05, Hidden Units: 800
+Mean Absolute Error: 0.11724347700190682
+Mean Squared Error: 0.02352345556485182
+R-squared: 0.9464984604322503
+
+Iterations: 3500, Learning Rate: 0.05, Hidden Units: 800
+Mean Absolute Error: 0.20064277827168156
+Mean Squared Error: 0.04809482092242118
+R-squared: 0.8906135640875192
+
+Iterations: 3100, Learning Rate: 0.05, Hidden Units: 800
+Mean Absolute Error: 0.09213954084034899
+Mean Squared Error: 0.01621101553771702
+R-squared: 0.9631298094434522
+
+Iterations: 2000, Learning Rate: 0.05, Hidden Units: 800
+Mean Absolute Error: 0.13221453800789298
+Mean Squared Error: 0.039607613076550606
+R-squared: 0.9099167946496154
+
+Iterations: 2900, Learning Rate: 0.05, Hidden Units: 800
+Mean Absolute Error: 0.23402957529272983
+Mean Squared Error: 0.06690761709463797
+R-squared: 0.8478259066358744
+
+Iterations: 2500, Learning Rate: 0.05, Hidden Units: 800
+Mean Absolute Error: 0.10084314176452039
+Mean Squared Error: 0.023245858436148195
+R-squared: 0.9471298248899205
+
+Iterations: 2000, Learning Rate: 0.05, Hidden Units: 1000
+Mean Absolute Error: 0.16588395275220733
+Mean Squared Error: 0.06828741146822531
+R-squared: 0.8446877144995055
+
+Iterations: 3000, Learning Rate: 0.05, Hidden Units: 1000
+Mean Absolute Error: 0.13177753288840924
+Mean Squared Error: 0.02823162827233504
+R-squared: 0.9357902340108912
+
+Iterations: 3100, Learning Rate: 0.05, Hidden Units: 1000
+Mean Absolute Error: 0.19609441937514047
+Mean Squared Error: 0.05182586306004707
+R-squared: 0.8821277148038198
+
+Iterations: 2500, Learning Rate: 0.05, Hidden Units: 1000
+Mean Absolute Error: 0.17434099485957916
+Mean Squared Error: 0.05844001395298842
+R-squared: 0.8670845484318472
+
+Iterations: 2900, Learning Rate: 0.05, Hidden Units: 1000
+Mean Absolute Error: 0.09916184980545484
+Mean Squared Error: 0.021772967616333523
+R-squared: 0.9504797547613222
+
+Iterations: 2850, Learning Rate: 0.05, Hidden Units: 650
+Mean Absolute Error: 0.15757673330234884
+Mean Squared Error: 0.03625091029253922
+R-squared: 0.917551249813775
+
+Iterations: 2750, Learning Rate: 0.05, Hidden Units: 650
+Mean Absolute Error: 0.09418310821667489
+Mean Squared Error: 0.017126019804014948
+R-squared: 0.9610487318218827
+
+Iterations: 2802, Learning Rate: 0.05, Hidden Units: 650
+Mean Absolute Error: 0.07145100784797528
+Mean Squared Error: 0.013526017226039034
+R-squared: 0.96923654588851
+
+Iterations: 2810, Learning Rate: 0.05, Hidden Units: 650
+Mean Absolute Error: 0.07215349429329554
+Mean Squared Error: 0.013421266639427554
+R-squared: 0.9694747896974985
+
+Iterations: 2820, Learning Rate: 0.05, Hidden Units: 650
+Mean Absolute Error: 0.10207205852835352
+Mean Squared Error: 0.016933083016115714
+R-squared: 0.9614875455481826
+
+Iterations: 2800, Learning Rate: 0.05, Hidden Units: 650
+Mean Absolute Error: 0.07146597891381476
+Mean Squared Error: 0.013559819655367473
+R-squared: 0.9691596659418026
+
+2000 iters, 0.05lr (q1_b):
+Mean Absolute Error: 0.7990908943537705
+Mean Squared Error: 0.9792205330661499
+R-squared: 0.9994001682866804
+
+1500 iters:
+Mean Absolute Error: 0.806677315356406
+Mean Squared Error: 0.998015933525024
+R-squared: 0.9993886549688128
+
+q2_b:
+2800iters, 650hu, 0.05lr:
+Mean Absolute Error: 0.9507017137894502
+Mean Squared Error: 1.4402615968997086
+R-squared: 0.3494592830493072
+
+2000iters, 650hu, 0.05lr:
+Mean Absolute Error: 1.0522963865149964
+Mean Squared Error: 1.7500736122500358
+R-squared: 0.20952266943704045
+
+5000iters, 800hu, 0.05lr:
+Mean Absolute Error: 0.8948201375969745
+Mean Squared Error: 1.3090492794308861
+R-squared: 0.408725568606509
+
+5000iters, 800hu, 0.01lr:
+Mean Absolute Error: 0.7999998918803377
+Mean Squared Error: 1.1322835446581032
+R-squared: 0.4885675279276043
+
+5000iters, 800hu, 0.001lr:
+Mean Absolute Error: 0.8226869687627595
+Mean Squared Error: 1.1430213133588076
+R-squared: 0.4837174675191038
+
+5000iters, 500hu, 0.01lr:
+Mean Absolute Error: 0.8204580775899808
+Mean Squared Error: 1.134546791042849
+R-squared: 0.4875452595223799
+
+5000iters, 500hu, 0.05lr:
+Mean Absolute Error: 0.8603671097042065
+Mean Squared Error: 1.2184847253457165
+R-squared: 0.44963197760311624
+
+5000iters, 1000hu, 0.02lr:
+Mean Absolute Error: 0.7956127579517386
+Mean Squared Error: 1.1270447082607988
+R-squared: 0.49093381776913436
+
+Iterations: 1000, Learning Rate: 0.05, Hidden Units: 1000
+Mean Absolute Error: 1.1108876737815117
+Mean Squared Error: 1.8994576279004254
+R-squared: 0.14204854886660545
+
+Iterations: 4000, Learning Rate: 0.03, Hidden Units: 1000
+Mean Absolute Error: 0.823305045457882
+Mean Squared Error: 1.2045364033810364
+R-squared: 0.455932188197285
+
+Iterations: 4000, Learning Rate: 0.001, Hidden Units: 1000
+Mean Absolute Error: 0.8186775521347902
+Mean Squared Error: 1.124442657835891
+R-squared: 0.492109117973351
+
+Iterations: 4000, Learning Rate: 0.0001, Hidden Units: 1000
+Mean Absolute Error: 1.0330471202608746
+Mean Squared Error: 1.6719920717069365
+R-squared: 0.24479072176507832
+
+Iterations: 5000, Learning Rate: 0.001, Hidden Units: 1000
+Mean Absolute Error: 0.8134638196983317
+Mean Squared Error: 1.1204436372748943
+R-squared: 0.4939154049065383
+
+Iterations: 5000, Learning Rate: 0.01, Hidden Units: 512
+Mean Absolute Error: 0.8984847392870249
+Mean Squared Error: 1.2703925186865053
+R-squared: 0.4261861444517401
+
+Iterations: 10000, Learning Rate: 0.01, Hidden Units: 256
+Mean Absolute Error: 0.785206704518673
+Mean Squared Error: 1.0788335909216835
+R-squared: 0.5127099276829823
+
+Iterations: 2000, Learning Rate: 0.05, Hidden Units: 800
+Mean Absolute Error: 1.054995334475129
+Mean Squared Error: 1.7381980335008065
+R-squared: 0.21488665854176825
+
+Iterations: 400, Learning Rate: 0.05, Hidden Units: 800
+Mean Absolute Error: 1.1537188246041106
+Mean Squared Error: 2.0746307977191916
+R-squared: 0.06292592299799338
+
+Iterations: 8000, Learning Rate: 0.01, Hidden Units: 800
+Mean Absolute Error: 0.7932999752303089
+Mean Squared Error: 1.078948183251951
+R-squared: 0.512658168352004
+
+Iterations: 8000, Learning Rate: 0.001, Hidden Units: 512
+Mean Absolute Error: 0.8120615851768582
+Mean Squared Error: 1.1246252745722813
+R-squared: 0.492026633219974
+
+Iterations: 4000, Learning Rate: 0.01, Hidden Units: 650
+Mean Absolute Error: 0.8140914354661163
+Mean Squared Error: 1.140173667857417
+R-squared: 0.4850036986802232
+
+Iterations: 4000, Learning Rate: 0.05, Hidden Units: 650
+Mean Absolute Error: 0.8934170393142026
+Mean Squared Error: 1.2753430503686491
+R-squared: 0.4239500767563149
+
+2800iters, 650hu, 0.05lr:
+Mean Absolute Error: 0.9507017137894502
+Mean Squared Error: 1.4402615968997086
+R-squared: 0.3494592830493072
+
+q3_a
+3layers:
+Iterations: 4500, Learning Rate: 0.005, Hidden Units: [128, 64, 32], Hidden Layers: 3
+Mean Absolute Error: 0.08867132474711165
+Mean Squared Error: 0.013920735898035084
+R-squared: 0.9679851908405299
+
+Iterations: 3000, Learning Rate: 0.005, Hidden Units: [30, 20, 15], Hidden Layers: 3
+Mean Absolute Error: 0.040840250831155916
+Mean Squared Error: 0.0024896467721895227
+R-squared: 0.9942743281052125
+
+5layers:
+Iterations: 2500, Learning Rate: 0.005, Hidden Units: [128, 64, 32, 16, 8], Hidden Layers: 5
+Mean Absolute Error: 0.0344191542076388
+Mean Squared Error: 0.0024908802842074527
+R-squared: 0.994271491283069
+
+Iterations: 2000, Learning Rate: 0.005, Hidden Units: [30, 20, 15, 10, 8], Hidden Layers: 5
+Mean Absolute Error: 0.01413720926086507
+Mean Squared Error: 0.0004227914435128955
+R-squared: 0.999027667252833
+
+
+q3_b:
+Iterations: 3000, Learning Rate: 0.005, Hidden Units: [30, 25, 15], Hidden Layers: 3
+Mean Absolute Error: 0.19818708797599485
+Mean Squared Error: 0.06453829288310081
+R-squared: 0.9708491933595104
+
+

@@ -25,10 +25,11 @@ np.random.seed(42)
 # I first used the number of iterations I used for the 1 dimensional data, to see if I need to
 # reduce the number of iterations. I saw 3000 was too much, so I reduced down to 2000, which
 # worked just as well as 3000. When I went down to 1500, the Mean Squared Error increased
-# too much for me, so I went back to 2000.
-Number_of_iterations = 2000
+# too much, so I went back to 2000.
+Number_of_iterations =200
 learning_rate = 0.05
 
+plots_file_path = "C:/Users/aqwan/GitHub/CMSC421-FALL23-Students/Assignment_1/plots"
 
 class Network(BaseNetwork):
     def __init__(self, data_layer):
@@ -113,6 +114,9 @@ def visualize_data(x_test, y_test, y_pred):
         ax.legend()
         ax.set_title(f'Scatter Plot for Feature_{i + 1}')
         plt.tight_layout()
+        file_name = plots_file_path + "/q1_b_lr{}_iters{}_comparison_plot_{}.png".format(learning_rate,
+                                                                                         Number_of_iterations, i+1)
+        plt.savefig(file_name)
         plt.show()
 
 
@@ -130,6 +134,8 @@ def main(test=False):
         plt.plot(loss)
         plt.ylabel('Loss of NN')
         plt.xlabel('Number of Iterations')
+        file_name = plots_file_path + "/q1_b_lr{}_iters{}_loss_plot.png".format(learning_rate, Number_of_iterations)
+        plt.savefig(file_name)
         plt.show()
 
         # Now let's use the test data

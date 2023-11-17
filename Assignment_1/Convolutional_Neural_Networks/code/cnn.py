@@ -69,6 +69,7 @@ class CNNModel(nn.Module):
         # - Optionally, consider adding dropout layers (`nn.Dropout`) for regularization if needed.
         # Fully Connected Layers
         # 2 fully connected layers
+        # Try just 2 fully connected layers.
         self.fc1 = nn.Linear(in_features=args.channel_out2 * 1 * 1, out_features=args.fc_hidden1)
         self.dropout = nn.Dropout(args.dropout)
         self.fc2 = nn.Linear(in_features=args.fc_hidden1, out_features=args.fc_hidden2)

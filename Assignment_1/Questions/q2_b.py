@@ -17,8 +17,11 @@ from Data.data import Data
 from Data.generator import q2_b
 from Model.evaluate.evaluate import evaluate_model
 
-Number_of_iterations = 5000 # 20000 is too many iterations, I should be around 2000 iterations?
-learning_rate = 0.02
+Number_of_iterations = 10000 # 20000 is too many iterations, I should be around 2000 iterations?
+learning_rate = 0.01
+hu = 64
+
+plots_file_path = "C:/Users/aqwan/GitHub/CMSC421-FALL23-Students/Assignment_1/plots"
 # From my experimenting, the first thing I usually tune is the learning rate
 # q2_b_hu1000_lr02_5000iter_comparison_plot_1
 # Takes about half an hour
@@ -55,7 +58,7 @@ class Trainer:
         '''
         hidden_units = parameters["hidden_units"]  # needed for prob 2, 3, 4
         # TODO: construct your network here
-        network = Network(data_layer, hidden_units)
+        network = Network(data_layer, hidden_units=hidden_units)
         return network
 
     def net_setup(self, training_data):
@@ -64,7 +67,7 @@ class Trainer:
         self.data_layer = Data(features)
         # TODO: construct the network. you don't have to use define_network.
         # increase hidden units
-        self.network = self.define_network(self.data_layer, parameters={'hidden_units': 800})
+        self.network = self.define_network(self.data_layer, parameters={'hidden_units': hu})
         # TODO: use the appropriate loss function here
         self.loss_layer = SquareLoss(self.network.get_output_layer(), labels=labels)
         # TODO: construct the optimizer class here. You can retrieve all modules with parameters (thus need to be optimized be the optimizer) by "network.get_modules_with_parameters()"
@@ -108,6 +111,9 @@ def visualize_data(x_test, y_test, y_pred):
         ax.legend()
         ax.set_title(f'Scatter Plot for Feature_{i + 1}')
         plt.tight_layout()
+        file_name = plots_file_path + "/q2_b_hu{}_lr{}_iters{}_comparison_plot_{}.png".format(hu, learning_rate,
+                                                                           Number_of_iterations, i+1)
+        plt.savefig(file_name)
         plt.show()
 
 
@@ -125,6 +131,9 @@ def main(test=False):
         plt.plot(loss)
         plt.ylabel('Loss of NN')
         plt.xlabel('Number of Iterations')
+
+        file_name = plots_file_path + "/q2_b_hu{}_lr{}_iters{}_loss_plot.png".format(hu, learning_rate, Number_of_iterations)
+        plt.savefig(file_name)
         plt.show()
 
         # Now let's use the test data
@@ -137,6 +146,7 @@ def main(test=False):
         y_pred = network.output_layer1.forward()
 
         metrics = evaluate_model(y_test, y_pred)
+        print("Iterations: {}, Learning Rate: {}, Hidden Units: {}".format(Number_of_iterations, learning_rate, hu))
         # Print the metrics for review
         for key, value in metrics.items():
             print(f"{key}: {value}")

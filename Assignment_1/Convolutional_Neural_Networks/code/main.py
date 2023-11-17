@@ -149,8 +149,8 @@ def main():
     args = argparse.Namespace(
         mode='train',
         num_epochs=1,
-        fc_hidden1=100,
-        fc_hidden2=50,
+        fc_hidden1=512,
+        fc_hidden2=128,
         learning_rate=0.01, # prev 0.002
         decay=0.5,
         batch_size=100,
@@ -158,7 +158,7 @@ def main():
         rotation=10,
         load_checkpoint=False,
         activation='relu',
-        channel_out1=64,
+        channel_out1=128,
         channel_out2=64, # change these values
         stride=1,
         max_stride=2,
