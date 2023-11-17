@@ -17,11 +17,11 @@ from Data.data import Data
 from Data.generator import q2_b
 from Model.evaluate.evaluate import evaluate_model
 
-Number_of_iterations = 2000 #
+Number_of_iterations = 2800 #
 learning_rate = 0.01 # this learning rate is fine
 hu = 1000 # use 1000 hidden units
 
-plots_file_path = "C:/Users/aqwan/Documents/GitHub/CMSC421-FALL23-Students/Assignment_1/plots"
+plots_file_path = "C:/Users/aqwan/GitHub/CMSC421-FALL23-Students/Assignment_1/plots"
 # From my experimenting, the first thing I usually tune is the learning rate
 # q2_b_hu1000_lr02_5000iter_comparison_plot_1
 # Takes about half an hour
