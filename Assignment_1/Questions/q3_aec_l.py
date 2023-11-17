@@ -30,14 +30,14 @@ from Model.evaluate.evaluate import evaluate_model
 
 # number of iterations are too much
 is_3_hidden_layers = True
-Number_of_iterations_3layers = 7000 # Experiment to pick your own number of ITERATIONS = batch size
+Number_of_iterations_3layers = 1000 # Experiment to pick your own number of ITERATIONS = batch size
 Number_of_iterations_5layers = 2500
 # For 5 layers, I needed to adjust not just the number of iterations, but also the learning rate
 # (needed to reduce it to 0.000001 instead of 0.00001)
 if is_3_hidden_layers:
-    learning_rate = 0.00001
+    learning_rate = 0.001
 else:
-    learning_rate = 0.000001 #.01 and .0001
+    learning_rate = 0.001 #.01 and .0001
 # So, I only want a few hundred iterations
 
 class Network(BaseNetwork):

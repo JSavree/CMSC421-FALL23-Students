@@ -332,6 +332,16 @@ Mean Absolute Error: 0.9507017137894502
 Mean Squared Error: 1.4402615968997086
 R-squared: 0.3494592830493072
 
+Iterations: 15000, Learning Rate: 0.01, Hidden Units: 256
+Mean Absolute Error: 0.7431973115869476
+Mean Squared Error: 0.9559906929681102
+R-squared: 0.5681958943150448
+
+Iterations: 2000, Learning Rate: 0.01, Hidden Units: 1000
+Mean Absolute Error: 0.8132868301919298
+Mean Squared Error: 1.1268966286333635
+R-squared: 0.49100070272059393
+
 q3_a
 3layers:
 Iterations: 4500, Learning Rate: 0.005, Hidden Units: [128, 64, 32], Hidden Layers: 3

@@ -51,10 +51,6 @@ class AdamSolver:
             # DONE: Update the weights (W) using the bias-corrected moments.
             # The update rule for Adam divides the learning rate-scaled m_hat by the square root of v_hat.
             # We add 'epsilon' to the denominator to prevent division by zero.
-            #print("m_m_hat", m_m_hat.shape)
-            #print("m_v_hat", m_v_hat.shape)
-            #print("module.W", module.W.shape)
-            #print(module)
             module.W -= self.learning_rate * m_m_hat / (np.sqrt(m_v_hat) + self.epsilon)
 
             pass
