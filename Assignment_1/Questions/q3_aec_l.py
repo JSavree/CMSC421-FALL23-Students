@@ -30,7 +30,7 @@ from Model.evaluate.evaluate import evaluate_model
 
 # number of iterations are too much
 is_3_hidden_layers = True
-Number_of_iterations_3layers = 1000 # Experiment to pick your own number of ITERATIONS = batch size
+Number_of_iterations_3layers = 5000 # Experiment to pick your own number of ITERATIONS = batch size
 Number_of_iterations_5layers = 2500
 # For 5 layers, I needed to adjust not just the number of iterations, but also the learning rate
 # (needed to reduce it to 0.000001 instead of 0.00001)

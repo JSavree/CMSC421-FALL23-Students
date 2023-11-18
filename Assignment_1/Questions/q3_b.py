@@ -55,7 +55,7 @@ else:
     hus = [30, 20, 15, 12, 10]
     layers = 5
 
-plots_file_path = "C:/Users/aqwan/GitHub/CMSC421-FALL23-Students/Assignment_1/plots"
+plots_file_path = "C:/Users/aqwan/Documents/GitHub/CMSC421-FALL23-Students/Assignment_1/plots"
 
 # trial and error is why I'm trying different hyperparameters.
 #

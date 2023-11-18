@@ -31,7 +31,7 @@ learning_rate = 0.005
 layers = 0
 hus = [0]
 if is_3_hidden_layers:
-    Number_of_iterations = 2500
+    Number_of_iterations = 3000
     hus = [30, 20, 15]
     layers = 3
 else:
